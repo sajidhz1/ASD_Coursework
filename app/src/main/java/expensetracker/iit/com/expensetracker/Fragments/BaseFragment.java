@@ -8,7 +8,8 @@ public class BaseFragment extends Fragment {
 
     public interface OnCreateListener
     {
-        void SetControlButtonVisibility(boolean show);
+        void SetAddButtonVisibility(boolean show);
+        void SetEditButtonVisibility(boolean show);
     }
 
     @Override
@@ -17,7 +18,8 @@ public class BaseFragment extends Fragment {
 
         if(getActivity() instanceof OnCreateListener)
         {
-            ((OnCreateListener) getActivity()).SetControlButtonVisibility(false);
+            ((OnCreateListener) getActivity()).SetAddButtonVisibility(false);
+            ((OnCreateListener) getActivity()).SetEditButtonVisibility(false);
         }
     }
 }

@@ -19,6 +19,10 @@ public class CategoriesFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(getActivity() instanceof OnCreateListener)
+        {
+            ((OnCreateListener) getActivity()).SetAddButtonVisibility(true);
+        }
     }
 
     @Override

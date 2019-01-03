@@ -68,15 +68,25 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnCr
     }
 
     @Override
-    public void SetControlButtonVisibility(boolean show) {
+    public void SetAddButtonVisibility(boolean show) {
         if(show)
         {
             addButton.setVisibility(View.VISIBLE);
-            editButton.setVisibility(View.VISIBLE);
         }
         else
         {
             addButton.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void SetEditButtonVisibility(boolean show) {
+        if(show)
+        {
+            editButton.setVisibility(View.VISIBLE);
+        }
+        else
+        {
             editButton.setVisibility(View.GONE);
         }
     }
