@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 import expensetracker.iit.com.expensetracker.R;
 
-public class SpendingFragment extends Fragment {
+public class SpendingFragment extends BaseFragment {
 
     public static SpendingFragment newInstance() {
         SpendingFragment fragment = new SpendingFragment();

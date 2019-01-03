@@ -7,16 +7,20 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
+import expensetracker.iit.com.expensetracker.Fragments.BaseFragment;
 import expensetracker.iit.com.expensetracker.Fragments.CategoriesFragment;
 import expensetracker.iit.com.expensetracker.Fragments.SettingsFragment;
 import expensetracker.iit.com.expensetracker.Fragments.SpendingFragment;
 import expensetracker.iit.com.expensetracker.Fragments.TransactionsFragment;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements BaseFragment.OnCreateListener{
 
     private TextView mTextMessage;
+    private Button addButton, editButton;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -58,6 +62,22 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.frame_layout, SpendingFragment.newInstance());
         transaction.commit();
+
+        addButton = (Button) findViewById(R.id.buttonAdd);
+        editButton = (Button) findViewById(R.id.buttonEdit);
     }
 
+    @Override
+    public void SetControlButtonVisibility(boolean show) {
+        if(show)
+        {
+            addButton.setVisibility(View.VISIBLE);
+            editButton.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            addButton.setVisibility(View.GONE);
+            editButton.setVisibility(View.GONE);
+        }
+    }
 }

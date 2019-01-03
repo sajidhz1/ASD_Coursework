@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 import expensetracker.iit.com.expensetracker.R;
 
-public class SettingsFragment extends Fragment {
+public class SettingsFragment extends BaseFragment {
 
     public static SettingsFragment newInstance() {
         SettingsFragment fragment = new SettingsFragment();

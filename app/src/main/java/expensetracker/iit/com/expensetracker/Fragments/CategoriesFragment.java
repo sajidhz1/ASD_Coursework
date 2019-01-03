@@ -5,10 +5,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 
 import expensetracker.iit.com.expensetracker.R;
 
-public class CategoriesFragment extends Fragment {
+public class CategoriesFragment extends BaseFragment {
 
     public static CategoriesFragment newInstance() {
         CategoriesFragment fragment = new CategoriesFragment();
