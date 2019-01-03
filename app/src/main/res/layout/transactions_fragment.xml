@@ -42,25 +42,27 @@
         android:background="#EAE8DB"
         android:padding="10dp">
 
-        <TextView android:id="@+id/credit"
+        <TextView
+            android:id="@+id/debit"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:gravity="center_horizontal"
             android:layout_weight="1"
-            android:padding="5dp"
-            android:background="#A5D6A7"
-            android:textColor="#1B5E20"
-            android:text="credit" />
-
-        <TextView android:id="@+id/debit"
-            android:layout_width="0dp"
-            android:padding="5dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center_horizontal"
             android:background="#EF9A9A"
-            android:textColor="#D50000"
-            android:text="debit" />
+            android:gravity="center_horizontal"
+            android:padding="5dp"
+            android:text="debit"
+            android:textColor="#D50000" />
+
+        <TextView
+            android:id="@+id/credit"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#A5D6A7"
+            android:gravity="center_horizontal"
+            android:padding="5dp"
+            android:text="credit"
+            android:textColor="#1B5E20" />
     </LinearLayout>
     <ListView
         android:layout_width="match_parent"
