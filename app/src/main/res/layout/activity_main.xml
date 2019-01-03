@@ -20,6 +20,17 @@
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
+            <Button
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/buttonEdit"
+                android:textSize="12sp"
+                android:background="@null"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="left"
+                android:text="Edit"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -27,6 +38,19 @@
                 android:textSize="20sp"
                 android:layout_gravity="center"
                 android:id="@+id/toolbar_title" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/buttonAdd"
+                android:textSize="12sp"
+                android:background="@null"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="right"
+                android:drawableTint="#ffffff"
+                android:paddingRight="10dp"
+                android:drawableRight="@drawable/ic_add_black_24dp"/>
 
         </android.support.v7.widget.Toolbar>
 
