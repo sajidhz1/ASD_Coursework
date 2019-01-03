@@ -10,6 +10,11 @@ import expensetracker.iit.com.expensetracker.R;
 
 public class SpendingFragment extends Fragment {
 
+    public static SpendingFragment newInstance() {
+        SpendingFragment fragment = new SpendingFragment();
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
