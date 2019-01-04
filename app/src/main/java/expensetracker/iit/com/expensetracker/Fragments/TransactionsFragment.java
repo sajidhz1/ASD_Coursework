@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import expensetracker.iit.com.expensetracker.Dialogs.CreateTransactionDialog;
 import expensetracker.iit.com.expensetracker.R;
 
 public class TransactionsFragment extends BaseFragment {
@@ -48,6 +49,13 @@ public class TransactionsFragment extends BaseFragment {
         TransactionAdapter adapter = new TransactionAdapter(this.getContext(),  textString, drawableIds);
         transactionsList = (ListView)getView().findViewById(R.id.transactionsList);
         transactionsList.setAdapter(adapter);
+    }
+
+    @Override
+    public void OpenAddNewDialog()
+    {
+        CreateTransactionDialog cdd =new CreateTransactionDialog(getActivity());
+        cdd.show();
     }
 
     public class TransactionAdapter extends BaseAdapter {

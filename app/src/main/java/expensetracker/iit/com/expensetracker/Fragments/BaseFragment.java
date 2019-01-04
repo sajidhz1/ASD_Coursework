@@ -22,4 +22,9 @@ public class BaseFragment extends Fragment {
             ((OnCreateListener) getActivity()).SetEditButtonVisibility(false);
         }
     }
+
+    public void OpenAddNewDialog()
+    {
+
+    }
 }

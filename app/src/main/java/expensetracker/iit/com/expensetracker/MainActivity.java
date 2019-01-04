@@ -21,13 +21,14 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnCr
 
     private TextView mTextMessage;
     private Button addButton, editButton;
+    Fragment selectedFragment = null;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            Fragment selectedFragment = null;
+
             switch (item.getItemId()) {
                 case R.id.navigation_spending:
                     selectedFragment = SpendingFragment.newInstance();
@@ -58,12 +59,19 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnCr
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        //Manually displaying the first fragment - one time only
+        selectedFragment = SpendingFragment.newInstance();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frame_layout, SpendingFragment.newInstance());
+        transaction.replace(R.id.frame_layout, selectedFragment);
         transaction.commit();
 
         addButton = (Button) findViewById(R.id.buttonAdd);
+        addButton.setOnClickListener((View v) -> {
+            if(selectedFragment instanceof BaseFragment)
+            {
+                ((BaseFragment) selectedFragment).OpenAddNewDialog();
+            }
+        });
+
         editButton = (Button) findViewById(R.id.buttonEdit);
     }
 
