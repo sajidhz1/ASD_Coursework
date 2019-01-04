@@ -54,7 +54,7 @@ public class TransactionsFragment extends BaseFragment {
     @Override
     public void OpenAddNewDialog()
     {
-        CreateTransactionDialog cdd =new CreateTransactionDialog(getActivity());
+        CreateTransactionDialog cdd = new CreateTransactionDialog(getActivity());
         cdd.show();
     }
 
