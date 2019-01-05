@@ -42,7 +42,7 @@ public class CreateTransactionDialog extends Dialog {
                 calendar.set(Calendar.YEAR, year);
                 calendar.set(Calendar.MONTH, monthOfYear);
                 calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateLabel();
+                updateDate();
             }
 
         };
@@ -55,7 +55,7 @@ public class CreateTransactionDialog extends Dialog {
         });
     }
 
-    private void updateLabel() {
+    private void updateDate() {
         String myFormat = "MM/dd/yy"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         dateEditText.setText(sdf.format(calendar.getTime()));
@@ -70,5 +70,10 @@ public class CreateTransactionDialog extends Dialog {
             int height = ViewGroup.LayoutParams.MATCH_PARENT;
             dialog.getWindow().setLayout(width, height);
         }
+    }
+
+    private void addNewTransaction()
+    {
+
     }
 }

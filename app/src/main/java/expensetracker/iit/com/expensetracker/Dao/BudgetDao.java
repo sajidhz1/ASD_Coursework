@@ -1,5 +1,6 @@
 package expensetracker.iit.com.expensetracker.Dao;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -22,6 +23,12 @@ public interface BudgetDao
     @Insert
     void insertAll(Budget... budgets);
 
+    @Insert
+    void insert(Budget budget);
+
     @Delete
     void delete(Budget budget);
+
+    @Query("SELECT * from budget")
+    LiveData<List<Budget>> getAllLive();
 }
