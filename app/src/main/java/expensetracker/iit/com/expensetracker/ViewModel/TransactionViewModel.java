@@ -16,7 +16,7 @@ public class TransactionViewModel extends AndroidViewModel
 
     private LiveData<List<Transaction>> mAllTransactions;
 
-    LiveData<List<Transaction>> getAllBudgets() { return mAllTransactions; }
+    LiveData<List<Transaction>> getAllTransactions() { return mAllTransactions; }
 
     public void insert(Transaction transaction) { mRepository.insert(transaction); }
 

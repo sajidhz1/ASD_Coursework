@@ -24,6 +24,6 @@ public class Transaction
     @ColumnInfo(name = "recurring")
     public boolean recurring;
 
-    @ColumnInfo(name = "recurring")
+    @ColumnInfo(name = "date")
     public Timestamp addedDate;
 }
