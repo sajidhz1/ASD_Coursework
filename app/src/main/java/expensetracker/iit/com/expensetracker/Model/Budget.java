@@ -5,17 +5,10 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
 @Entity
-public class Category
-{
+public class Budget {
     @PrimaryKey
-    public int cid;
+    public int bid;
 
-    @ColumnInfo(name = "category_name")
-    public String name;
-
-    @ColumnInfo(name = "type")
-    public String type;
-
-    @ColumnInfo(name = "budget")
-    public Budget budget;
+    @ColumnInfo(name = "budget_amount")
+    public double budget;
 }
