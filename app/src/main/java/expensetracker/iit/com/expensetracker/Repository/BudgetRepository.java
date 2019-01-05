@@ -1,4 +1,4 @@
-package expensetracker.iit.com.expensetracker.Repositories;
+package expensetracker.iit.com.expensetracker.Repository;
 
 import android.app.Application;
 import android.arch.lifecycle.LiveData;
@@ -15,13 +15,13 @@ public class BudgetRepository
     private BudgetDao mbudgetDao;
     private LiveData<List<Budget>> mAllBudgets;
 
-    BudgetRepository(Application application) {
+    public BudgetRepository(Application application) {
         AppDatabase db = AppDatabase.getDatabase(application);
         mbudgetDao = db.budgetDao();
         mAllBudgets = mbudgetDao.getAllLive();
     }
 
-    LiveData<List<Budget>> getAllWords() {
+    public LiveData<List<Budget>> getAllBudgets() {
         return mAllBudgets;
     }
 
