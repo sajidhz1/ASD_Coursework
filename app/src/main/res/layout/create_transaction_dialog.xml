@@ -24,25 +24,20 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
-        android:text="dsds"
+        android:text="Category"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/reg_title" />
 
-    <EditText
-        android:id="@+id/reg_business_email"
+    <Spinner
+        android:id="@+id/spinner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:ems="10"
-        android:imeOptions="actionDone"
-        android:inputType="textWebEmailAddress"
-        android:lines="1"
-        android:padding="4dp"
-        android:textColor="@color/colorPrimaryDark"
-        app:layout_constraintHorizontal_bias="0.0"
+        android:spinnerMode="dialog"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView14" />
 
@@ -52,20 +47,21 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
-        android:text="dsdsds"
+        android:text="Date"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/reg_business_email" />
+        app:layout_constraintTop_toBottomOf="@+id/spinner" />
 
-    <TextView
-        android:id="@+id/reg_business_phone"
+    <EditText
+        android:id="@+id/date"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:clickable="true"
+        android:focusable="false"
         android:layout_marginTop="8dp"
         android:ems="10"
         android:imeOptions="actionDone"
-        android:inputType="phone"
         android:lines="1"
         android:padding="4dp"
         android:textColor="@color/colorPrimaryDark"
@@ -80,23 +76,27 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
-        android:text="VERIFICATION METHOD"
+        android:text="Amount"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/reg_business_phone" />
+        app:layout_constraintTop_toBottomOf="@+id/date" />
 
-    <Spinner
-        android:id="@+id/spinner"
+    <EditText
+        android:id="@+id/amount"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:spinnerMode="dialog"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:ems="10"
+        android:imeOptions="actionDone"
+        android:inputType="numberDecimal"
+        android:lines="1"
+        android:padding="4dp"
+        android:textColor="@color/colorPrimaryDark"
         app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView19" />
-
 
     <LinearLayout
         android:id="@+id/controlButtons"
