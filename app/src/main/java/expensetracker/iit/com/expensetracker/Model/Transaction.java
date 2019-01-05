@@ -1,10 +1,14 @@
 package expensetracker.iit.com.expensetracker.Model;
 
 import android.arch.persistence.room.ColumnInfo;
+import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.TypeConverters;
 
-import java.sql.Timestamp;
+import java.util.Date;
+
+import expensetracker.iit.com.expensetracker.Common.DateConverter;
 
 @Entity
 public class Transaction
@@ -15,8 +19,8 @@ public class Transaction
     @ColumnInfo(name = "amount")
     public double Amount;
 
-    @ColumnInfo(name = "category")
-    public Category category;
+    @ColumnInfo(name = "category_id")
+    public int categoryID;
 
     @ColumnInfo(name = "note")
     public String note;
@@ -24,6 +28,6 @@ public class Transaction
     @ColumnInfo(name = "recurring")
     public boolean recurring;
 
-    @ColumnInfo(name = "date")
-    public Timestamp addedDate;
+    @TypeConverters(DateConverter.class)
+    public Date addedDate;
 }

@@ -1,4 +1,4 @@
-package expensetracker.iit.com.expensetracker;
+package expensetracker.iit.com.expensetracker.Common;
 
 import android.app.Application;
 
