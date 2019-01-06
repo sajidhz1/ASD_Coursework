@@ -53,13 +53,13 @@ public class TransactionsFragment extends BaseFragment implements CreateTransact
     public void onResume() {
         super.onResume();
 
-        RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.transactionsList);
-        final TransactionAdapter adapter = new TransactionAdapter(getContext());
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
         // Get a new or existing ViewModel from the ViewModelProvider.
         mTransactionViewModel = ViewModelProviders.of(this).get(TransactionViewModel.class);
+
+        RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.transactionsList);
+        final TransactionAdapter adapter = new TransactionAdapter(getContext(), mTransactionViewModel);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         mTransactionViewModel.getAllTransactions().observe(this, new Observer<List<Transaction>>() {
             @Override
@@ -85,6 +85,8 @@ public class TransactionsFragment extends BaseFragment implements CreateTransact
 
     public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder> {
 
+        private TransactionViewModel viewModel;
+
         class TransactionViewHolder extends RecyclerView.ViewHolder {
             protected TextView transactionNoteTextView;
             protected ImageView transactionIcon;
@@ -104,7 +106,7 @@ public class TransactionsFragment extends BaseFragment implements CreateTransact
         private final LayoutInflater mInflater;
         private List<Transaction> mTransactions;
 
-        TransactionAdapter(Context context) { mInflater = LayoutInflater.from(context); }
+        TransactionAdapter(Context context, TransactionViewModel mTransactionViewModel) { mInflater = LayoutInflater.from(context); viewModel = mTransactionViewModel; }
 
         @Override
         public TransactionViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -124,7 +126,7 @@ public class TransactionsFragment extends BaseFragment implements CreateTransact
                 });
 
                 holder.deleteButton.setOnClickListener((View v) -> {
-
+                    viewModel.delete(current);
                 });
             } else {
                 // Covers the case of data not being ready yet.

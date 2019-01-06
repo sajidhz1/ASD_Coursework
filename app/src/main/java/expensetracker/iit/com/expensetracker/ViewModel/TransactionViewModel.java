@@ -20,6 +20,8 @@ public class TransactionViewModel extends AndroidViewModel
 
     public void insert(Transaction transaction) { mRepository.insert(transaction); }
 
+    public void delete(Transaction transaction) { mRepository.delete(transaction); }
+
     public TransactionViewModel(@NonNull Application application) {
         super(application);
         mRepository = new TransactionRepository(application);

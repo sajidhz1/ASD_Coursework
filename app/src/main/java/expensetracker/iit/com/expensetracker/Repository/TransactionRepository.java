@@ -30,6 +30,10 @@ public class TransactionRepository
         new TransactionRepository.insertAsyncTask(mTransactionDao).execute(transaction);
     }
 
+    public void delete (Transaction transaction) {
+        new TransactionRepository.deleteTaskAsync(mTransactionDao).execute(transaction);
+    }
+
     private static class insertAsyncTask extends AsyncTask<Transaction, Void, Void> {
 
         private TransactionsDao mAsyncTaskDao;
@@ -41,6 +45,20 @@ public class TransactionRepository
         @Override
         protected Void doInBackground(final Transaction... params) {
             mAsyncTaskDao.insert(params[0]);
+            return null;
+        }
+    }
+
+    private static class deleteTaskAsync extends AsyncTask<Transaction, Void, Void> {
+        private TransactionsDao mAsyncTaskDao;
+
+        deleteTaskAsync(TransactionsDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(Transaction... transactions) {
+            mAsyncTaskDao.delete(transactions[0]);
             return null;
         }
     }
