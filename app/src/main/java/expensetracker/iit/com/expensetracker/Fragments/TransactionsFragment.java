@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -38,7 +39,7 @@ public class TransactionsFragment extends BaseFragment implements CreateTransact
         if(getActivity() instanceof OnCreateListener)
         {
             ((OnCreateListener) getActivity()).SetAddButtonVisibility(true);
-            ((OnCreateListener) getActivity()).SetEditButtonVisibility(true);
+            //((OnCreateListener) getActivity()).SetEditButtonVisibility(true);
         }
     }
 
@@ -85,13 +86,18 @@ public class TransactionsFragment extends BaseFragment implements CreateTransact
     public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder> {
 
         class TransactionViewHolder extends RecyclerView.ViewHolder {
-            private final TextView transactionNoteTextView;
-            private final ImageView transactionIcon;
+            protected TextView transactionNoteTextView;
+            protected ImageView transactionIcon;
+            protected ImageButton deleteButton;
+            protected ImageButton editButton;
+
 
             private TransactionViewHolder(View itemView) {
                 super(itemView);
                 transactionIcon = itemView.findViewById(R.id.imgIcon);
                 transactionNoteTextView = itemView.findViewById(R.id.txtTitle);
+                deleteButton = itemView.findViewById(R.id.delete_button);
+                editButton= itemView.findViewById(R.id.edit_button);
             }
         }
 
@@ -112,6 +118,14 @@ public class TransactionsFragment extends BaseFragment implements CreateTransact
                 Transaction current = mTransactions.get(position);
                 holder.transactionIcon.setImageResource(R.drawable.ic_attach_spending_black_24dp);
                 holder.transactionNoteTextView.setText(current.getNote());
+
+                holder.editButton.setOnClickListener((View v) -> {
+
+                });
+
+                holder.deleteButton.setOnClickListener((View v) -> {
+
+                });
             } else {
                 // Covers the case of data not being ready yet.
                 holder.transactionNoteTextView.setText("No Word");
