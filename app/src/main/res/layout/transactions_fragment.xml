@@ -2,6 +2,7 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <LinearLayout
@@ -64,14 +65,12 @@
             android:text="credit"
             android:textColor="#1B5E20" />
     </LinearLayout>
-    <ListView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/transactionsList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@+id/amountMenu"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:choiceMode="singleChoice"
-        android:divider="@android:color/darker_gray"
-        android:dividerHeight="0.5dp"
         android:background="#F4F2E5"
-        android:id="@+id/transactionsList" />
+        tools:listitem="@layout/transactions_row" />
 </android.support.constraint.ConstraintLayout>

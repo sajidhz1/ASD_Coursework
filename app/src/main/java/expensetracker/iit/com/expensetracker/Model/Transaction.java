@@ -1,7 +1,6 @@
 package expensetracker.iit.com.expensetracker.Model;
 
 import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Embedded;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
@@ -13,21 +12,82 @@ import expensetracker.iit.com.expensetracker.Common.DateConverter;
 @Entity
 public class Transaction
 {
-    @PrimaryKey
-    public int tid;
+    @PrimaryKey(autoGenerate = true)
+    private int tid;
 
     @ColumnInfo(name = "amount")
-    public double Amount;
+    private double Amount;
 
     @ColumnInfo(name = "category_id")
-    public int categoryID;
+    private int categoryID;
 
     @ColumnInfo(name = "note")
-    public String note;
+    private String note;
 
     @ColumnInfo(name = "recurring")
-    public boolean recurring;
+    private boolean recurring;
 
     @TypeConverters(DateConverter.class)
-    public Date addedDate;
+    private Date addedDate;
+
+    public Transaction()
+    {
+    }
+
+    public Transaction(double amount, int categoryID, String note, boolean recurring, Date addedDate)
+    {
+        setAmount(amount);
+        this.setCategoryID(categoryID);
+        this.setNote(note);
+        this.setRecurring(recurring);
+        this.setAddedDate(addedDate);
+    }
+
+    public int getTid() {
+        return tid;
+    }
+
+    public double getAmount() {
+        return Amount;
+    }
+
+    public int getCategoryID() {
+        return categoryID;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public boolean isRecurring() {
+        return recurring;
+    }
+
+    public Date getAddedDate() {
+        return addedDate;
+    }
+
+    public void setAmount(double amount) {
+        Amount = amount;
+    }
+
+    public void setCategoryID(int categoryID) {
+        this.categoryID = categoryID;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public void setRecurring(boolean recurring) {
+        this.recurring = recurring;
+    }
+
+    public void setAddedDate(Date addedDate) {
+        this.addedDate = addedDate;
+    }
+
+    public void setTid(int tid) {
+        this.tid = tid;
+    }
 }

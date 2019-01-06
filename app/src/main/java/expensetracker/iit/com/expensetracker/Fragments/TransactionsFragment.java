@@ -1,21 +1,30 @@
 package expensetracker.iit.com.expensetracker.Fragments;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import expensetracker.iit.com.expensetracker.Dialogs.CreateTransactionDialog;
-import expensetracker.iit.com.expensetracker.R;
+import java.util.List;
 
-public class TransactionsFragment extends BaseFragment {
+import expensetracker.iit.com.expensetracker.Dialogs.CreateTransactionDialog;
+import expensetracker.iit.com.expensetracker.Model.Transaction;
+import expensetracker.iit.com.expensetracker.R;
+import expensetracker.iit.com.expensetracker.ViewModel.TransactionViewModel;
+
+public class TransactionsFragment extends BaseFragment implements CreateTransactionDialog.OnTransactionAddListener {
 
     private ListView transactionsList;
+    private TransactionViewModel mTransactionViewModel;
 
     public static TransactionsFragment newInstance() {
         TransactionsFragment fragment = new TransactionsFragment();
@@ -43,62 +52,84 @@ public class TransactionsFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
 
-        String[] textString = {"Item1", "Item2", "Item3", "Item4"};
-        int[] drawableIds = {R.drawable.ic_notifications_black_24dp, R.drawable.ic_notifications_black_24dp, R.drawable.ic_notifications_black_24dp, R.drawable.ic_notifications_black_24dp};
+        RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.transactionsList);
+        final TransactionAdapter adapter = new TransactionAdapter(getContext());
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        TransactionAdapter adapter = new TransactionAdapter(this.getContext(),  textString, drawableIds);
-        transactionsList = (ListView)getView().findViewById(R.id.transactionsList);
-        transactionsList.setAdapter(adapter);
+        // Get a new or existing ViewModel from the ViewModelProvider.
+        mTransactionViewModel = ViewModelProviders.of(this).get(TransactionViewModel.class);
+
+        mTransactionViewModel.getAllTransactions().observe(this, new Observer<List<Transaction>>() {
+            @Override
+            public void onChanged(@Nullable final List<Transaction> transactions) {
+                // Update the cached copy of the words in the adapter.
+                adapter.setTransactions(transactions);
+            }
+        });
     }
 
     @Override
     public void OpenAddNewDialog()
     {
-        CreateTransactionDialog cdd = new CreateTransactionDialog(getActivity());
+        CreateTransactionDialog cdd = new CreateTransactionDialog(getActivity(), this);
         cdd.show();
     }
 
-    public class TransactionAdapter extends BaseAdapter {
+    @Override
+    public void AddTransaction(Transaction transaction)
+    {
+        mTransactionViewModel.insert(transaction);
+    }
 
-        private Context mContext;
-        private String[]  Title;
-        private int[] imge;
+    public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder> {
 
-        public TransactionAdapter(Context context, String[] text1, int[] imageIds) {
-            mContext = context;
-            Title = text1;
-            imge = imageIds;
+        class TransactionViewHolder extends RecyclerView.ViewHolder {
+            private final TextView transactionNoteTextView;
+            private final ImageView transactionIcon;
 
+            private TransactionViewHolder(View itemView) {
+                super(itemView);
+                transactionIcon = itemView.findViewById(R.id.imgIcon);
+                transactionNoteTextView = itemView.findViewById(R.id.txtTitle);
+            }
         }
 
-        public int getCount() {
-            // TODO Auto-generated method stub
-            return Title.length;
+        private final LayoutInflater mInflater;
+        private List<Transaction> mTransactions;
+
+        TransactionAdapter(Context context) { mInflater = LayoutInflater.from(context); }
+
+        @Override
+        public TransactionViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View itemView = mInflater.inflate(R.layout.transactions_row, parent, false);
+            return new TransactionViewHolder(itemView);
         }
 
-        public Object getItem(int arg0) {
-            // TODO Auto-generated method stub
-            return null;
+        @Override
+        public void onBindViewHolder(TransactionViewHolder holder, int position) {
+            if (mTransactions != null) {
+                Transaction current = mTransactions.get(position);
+                holder.transactionIcon.setImageResource(R.drawable.ic_attach_spending_black_24dp);
+                holder.transactionNoteTextView.setText(current.getNote());
+            } else {
+                // Covers the case of data not being ready yet.
+                holder.transactionNoteTextView.setText("No Word");
+            }
         }
 
-        public long getItemId(int position) {
-            // TODO Auto-generated method stub
-            return position;
+        void setTransactions(List<Transaction> transactions){
+            mTransactions = transactions;
+            notifyDataSetChanged();
         }
 
-        public View getView(int position, View convertView, ViewGroup parent) {
-
-            LayoutInflater inflater = getLayoutInflater();
-            View row;
-            row = inflater.inflate(R.layout.transactions_row, parent, false);
-            TextView title;
-            ImageView i1;
-            i1 = (ImageView) row.findViewById(R.id.imgIcon);
-            title = (TextView) row.findViewById(R.id.txtTitle);
-            title.setText(Title[position]);
-            i1.setImageResource(imge[position]);
-
-            return (row);
+        // getItemCount() is called many times, and when it is first called,
+        // mWords has not been updated (means initially, it's null, and we can't return null).
+        @Override
+        public int getItemCount() {
+            if (mTransactions != null)
+                return mTransactions.size();
+            else return 0;
         }
     }
 }
