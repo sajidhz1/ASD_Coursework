@@ -9,6 +9,8 @@
     <string name="username">username</string>
     <string name="email">email</string>
     <string name="skip">skip</string>
-    <string name="Pin">hint</string>
+    <string name="welcome_to_app">Welcome To App</string>
+    <string name="user_name">User Name</string>
+    <string name="submit">Submit</string>
     <string name="pin">Pin</string>
 </resources>
