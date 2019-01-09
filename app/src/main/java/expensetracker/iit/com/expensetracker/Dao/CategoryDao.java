@@ -1,5 +1,6 @@
 package expensetracker.iit.com.expensetracker.Dao;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -11,8 +12,7 @@ import expensetracker.iit.com.expensetracker.Model.Category;
 import expensetracker.iit.com.expensetracker.Model.Transaction;
 
 @Dao
-public interface CategoryDao
-{
+public interface CategoryDao {
     @Query("SELECT * FROM `category`")
     List<Category> getAll();
 
@@ -24,4 +24,10 @@ public interface CategoryDao
 
     @Delete
     void delete(Category category);
+
+    @Insert
+    void insert(Category category);
+
+    @Query("SELECT * FROM `category`")
+    LiveData<List<Category>> getAllLive();
 }
