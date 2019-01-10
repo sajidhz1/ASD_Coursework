@@ -20,6 +20,9 @@ public class UserRepository {
         mAllUsers = mUserDao.getAllLive();
     }
 
+    public List<User> getUsersByPin(int pinNo){
+        return mUserDao.getUsersByPin(pinNo);
+    }
     public void insert (User obj) {
         new UserRepository.insertAsyncTask(mUserDao).execute(obj);
     }

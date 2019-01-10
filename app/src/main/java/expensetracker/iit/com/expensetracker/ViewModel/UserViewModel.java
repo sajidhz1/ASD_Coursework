@@ -18,6 +18,8 @@ public class UserViewModel extends AndroidViewModel {
 
     public void delete(User user) { mRepository.delete(user); }
 
+    public List<User> getUsersByPin(int pinNo){ return mRepository.getUsersByPin(pinNo); }
+
     public LiveData<List<User>> getAll() { return mRepository.getAllUsers(); }
 
     public UserViewModel(@NonNull Application application) {

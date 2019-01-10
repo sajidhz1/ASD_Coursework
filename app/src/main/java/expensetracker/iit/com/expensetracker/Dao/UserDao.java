@@ -17,7 +17,7 @@ public interface UserDao
     List<User> getAll();
 
     @Query("SELECT * FROM `user` WHERE pinNo IN (:pinNo)")
-    List<User> loadAllPin (int pinNo);
+    List<User> getUsersByPin (int pinNo);
 
     @Delete
     void delete(User param);
