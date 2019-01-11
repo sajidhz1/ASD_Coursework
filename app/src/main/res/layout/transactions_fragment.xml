@@ -16,7 +16,7 @@
         android:background="#EAE8DB"
         android:padding="10dp">
 
-        <TextView android:id="@+id/export"
+        <TextView android:id="@+id/sort"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:gravity="left"
@@ -24,7 +24,7 @@
             android:layout_weight="1"
             android:text="sort" />
 
-        <TextView android:id="@+id/sort"
+        <TextView android:id="@+id/export"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"

@@ -14,4 +14,6 @@
     <string name="submit">Submit</string>
     <string name="pin">Pin</string>
     <string name="invalid_pin">Invalid Pin</string>
+    <string name="price_low_to_high">Amount Low to High</string>
+    <string name="price_high_to_low">Amount High to Low</string>
 </resources>

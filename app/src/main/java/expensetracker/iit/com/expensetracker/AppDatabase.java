@@ -29,7 +29,7 @@ public abstract class AppDatabase extends RoomDatabase
             synchronized (AppDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            AppDatabase.class, "expensetracker_database_v4")
+                            AppDatabase.class, "expensetracker_database_v5")
                             .build();
                 }
             }
