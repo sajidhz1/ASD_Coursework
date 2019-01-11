@@ -8,16 +8,19 @@ import android.content.Context;
 import expensetracker.iit.com.expensetracker.Dao.BudgetDao;
 import expensetracker.iit.com.expensetracker.Dao.CategoryDao;
 import expensetracker.iit.com.expensetracker.Dao.TransactionsDao;
+import expensetracker.iit.com.expensetracker.Dao.UserDao;
 import expensetracker.iit.com.expensetracker.Model.Budget;
 import expensetracker.iit.com.expensetracker.Model.Category;
 import expensetracker.iit.com.expensetracker.Model.Transaction;
+import expensetracker.iit.com.expensetracker.Model.User;
 
-@Database(entities = {Budget.class, Transaction.class, Category.class}, version = 1)
+@Database(entities = {Budget.class, Transaction.class, Category.class, User.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase
 {
     public abstract TransactionsDao transactionsDao();
     public abstract CategoryDao categoryDao();
     public abstract BudgetDao budgetDao();
+    public abstract UserDao UserDao();
 
     private static volatile AppDatabase INSTANCE;
 
@@ -26,7 +29,7 @@ public abstract class AppDatabase extends RoomDatabase
             synchronized (AppDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            AppDatabase.class, "expensetracker_database")
+                            AppDatabase.class, "expensetracker_database_v4")
                             .build();
                 }
             }
