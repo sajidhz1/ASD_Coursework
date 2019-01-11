@@ -10,8 +10,7 @@ import expensetracker.iit.com.expensetracker.AppDatabase;
 import expensetracker.iit.com.expensetracker.Dao.TransactionsDao;
 import expensetracker.iit.com.expensetracker.Model.Transaction;
 
-public class TransactionRepository
-{
+public class TransactionRepository {
     private TransactionsDao mTransactionDao;
     private LiveData<List<Transaction>> mAllBudgets;
 
@@ -26,11 +25,11 @@ public class TransactionRepository
     }
 
 
-    public void insert (Transaction transaction) {
+    public void insert(Transaction transaction) {
         new TransactionRepository.insertAsyncTask(mTransactionDao).execute(transaction);
     }
 
-    public void delete (Transaction transaction) {
+    public void delete(Transaction transaction) {
         new TransactionRepository.deleteTaskAsync(mTransactionDao).execute(transaction);
     }
 
