@@ -30,4 +30,7 @@ public interface CategoryDao {
 
     @Query("SELECT * FROM `category`")
     LiveData<List<Category>> getAllLive();
+
+    @Query("DELETE FROM `category`")
+    public void deleteAll();
 }

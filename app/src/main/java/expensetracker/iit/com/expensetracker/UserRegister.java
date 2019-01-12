@@ -16,6 +16,7 @@ import java.text.ParseException;
 import java.util.List;
 
 import expensetracker.iit.com.expensetracker.Model.User;
+import expensetracker.iit.com.expensetracker.Model.UserRegisterModel;
 import expensetracker.iit.com.expensetracker.ViewModel.UserViewModel;
 
 public class UserRegister extends AppCompatActivity {
@@ -24,11 +25,6 @@ public class UserRegister extends AppCompatActivity {
     EditText userName, pinNo;
     Button saveButton;
     private UserViewModel mUserViewModel;
-    private static User currentUser;
-
-    public static User getCurrentUser(){
-        return currentUser;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,19 +64,16 @@ public class UserRegister extends AppCompatActivity {
 
             User user = new User(userName.getText().toString(), pin);
             mUserViewModel.insert(user);
-
-            Intent i = new Intent(UserRegister.this, MainActivity.class);
-            startActivity(i);
         });
 
-        currentUser = null;
+        UserRegisterModel.setCurrentUser(null);
         mUserViewModel.getAll().observe(this, new Observer<List<User>>() {
 
             @Override
             public void onChanged(@Nullable List<User> users) {
-                currentUser = null;
+                UserRegisterModel.setCurrentUser(null);
                 if(users.size() > 0){
-                    currentUser = users.get(0);
+                    UserRegisterModel.setCurrentUser(users.get(0));
                     Intent i = new Intent(UserRegister.this, PinActivity.class);
                     startActivity(i);
                 }
