@@ -32,7 +32,7 @@ public abstract class AppDatabase extends RoomDatabase
             {
                 if (INSTANCE == null)
                 {
-                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "expensetracker_database_v5").build();
+                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "expensetracker_database_v6").build();
                 }
             }
         }

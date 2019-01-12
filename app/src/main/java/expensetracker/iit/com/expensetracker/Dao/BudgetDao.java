@@ -30,5 +30,8 @@ public interface BudgetDao
     void delete(Budget budget);
 
     @Query("SELECT * from budget")
-    LiveData<List<Budget>> getAllLive();
+    LiveData<List<Budget>> getAllLive(); 
+
+    @Query("DELETE FROM `category`")
+    public void deleteAll();
 }

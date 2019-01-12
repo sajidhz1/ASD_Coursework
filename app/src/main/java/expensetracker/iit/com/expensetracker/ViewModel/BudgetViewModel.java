@@ -27,5 +27,6 @@ public class BudgetViewModel extends AndroidViewModel
 
     public void insert(Budget budget) { mRepository.insert(budget); }
 
+    public void deleteAll() { mRepository.deleteAll(); }
 
 }
