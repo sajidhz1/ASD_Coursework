@@ -30,16 +30,18 @@ public class CreateTransactionDialog extends Dialog {
     EditText dateEditText, noteEditText, amountEditText;
     CheckBox recurrentCheckBox;
     Button saveButton, cancelButton;
+    Transaction transaction;
 
     final Calendar calendar = Calendar.getInstance();
     private OnTransactionAddListener onTransactionAddListener;
 
-    public CreateTransactionDialog(@NonNull Context context, OnTransactionAddListener onTransactionAddListener) {
+    public CreateTransactionDialog(@NonNull Context context, OnTransactionAddListener onTransactionAddListener, Transaction transaction) {
         super(context, R.style.full_screen_dialog);
         getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.MATCH_PARENT);
 
         this.onTransactionAddListener = onTransactionAddListener;
+        this.transaction = transaction;
     }
 
     @Override
@@ -54,10 +56,28 @@ public class CreateTransactionDialog extends Dialog {
         saveButton = findViewById(R.id.btn_yes);
         cancelButton = findViewById(R.id.btn_no);
 
+        if(transaction != null)
+        {
+            updateDate(transaction.getAddedDate());
+            noteEditText.setText(transaction.getNote());
+            amountEditText.setText(transaction.getAmount() +"");
+            recurrentCheckBox.setChecked(transaction.isRecurring());
+        }
+
         saveButton.setOnClickListener((View v) -> {
             SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_FORMAT, Locale.US);
             try {
-                onTransactionAddListener.AddTransaction(new Transaction(Double.parseDouble(amountEditText.getText().toString()), 1, noteEditText.getText().toString(), recurrentCheckBox.isChecked(), sdf.parse(dateEditText.getText().toString())));
+                if(transaction == null)
+                {
+                    onTransactionAddListener.AddTransaction(new Transaction(Double.parseDouble(amountEditText.getText().toString()), 1, noteEditText.getText().toString(), recurrentCheckBox.isChecked(), sdf.parse(dateEditText.getText().toString())));
+                }
+                else {
+                    transaction.setNote(noteEditText.getText().toString());
+                    transaction.setAddedDate(sdf.parse(dateEditText.getText().toString()));
+                    transaction.setAmount(Double.parseDouble(amountEditText.getText().toString()));
+                    transaction.setRecurring(recurrentCheckBox.isChecked());
+                    onTransactionAddListener.UpdateTransaction(transaction);
+                }
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -78,7 +98,7 @@ public class CreateTransactionDialog extends Dialog {
                 calendar.set(Calendar.YEAR, year);
                 calendar.set(Calendar.MONTH, monthOfYear);
                 calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                updateDate();
+                updateDate(null);
             }
 
         };
@@ -91,9 +111,16 @@ public class CreateTransactionDialog extends Dialog {
         });
     }
 
-    private void updateDate() {
-        SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_FORMAT, Locale.US);
-        dateEditText.setText(sdf.format(calendar.getTime()));
+    private void updateDate(Date d) {
+        if(d != null)
+        {
+            SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_FORMAT, Locale.US);
+            dateEditText.setText(sdf.format(d));
+        }
+        else {
+            SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_FORMAT, Locale.US);
+            dateEditText.setText(sdf.format(calendar.getTime()));
+        }
     }
 
     @Override
@@ -109,5 +136,6 @@ public class CreateTransactionDialog extends Dialog {
 
     public interface OnTransactionAddListener {
         public void AddTransaction(Transaction transaction);
+        public void UpdateTransaction(Transaction transaction);
     }
 }
