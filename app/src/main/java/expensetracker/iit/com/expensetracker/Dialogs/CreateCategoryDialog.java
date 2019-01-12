@@ -21,6 +21,7 @@ import java.util.Locale;
 
 import expensetracker.iit.com.expensetracker.Common.Constants;
 import expensetracker.iit.com.expensetracker.Model.Category;
+import expensetracker.iit.com.expensetracker.Model.Transaction;
 import expensetracker.iit.com.expensetracker.R;
 
 public class CreateCategoryDialog extends Dialog {
@@ -28,16 +29,17 @@ public class CreateCategoryDialog extends Dialog {
     EditText nameEditText, budgetEditText;
     Spinner typeSpinner;
     Button saveButton, cancelButton;
+    Category category;
 
-    final Calendar calendar = Calendar.getInstance();
     private OnCategoryAddListener onCategoryAddListener;
 
-    public CreateCategoryDialog(@NonNull Context context, OnCategoryAddListener onCategoryAddListener) {
+    public CreateCategoryDialog(@NonNull Context context, OnCategoryAddListener onCategoryAddListener, Category category) {
         super(context, R.style.full_screen_dialog);
         getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.MATCH_PARENT);
 
         this.onCategoryAddListener = onCategoryAddListener;
+        this.category = category;
     }
 
     @Override
@@ -51,10 +53,19 @@ public class CreateCategoryDialog extends Dialog {
         saveButton = findViewById(R.id.btnSave);
         cancelButton = findViewById(R.id.btnCancel);
 
+        if (category != null) {
+            nameEditText.setText(category.getName());
+        }
+
         saveButton.setOnClickListener((View v) -> {
             SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_FORMAT, Locale.US);
             try {
-                onCategoryAddListener.AddCategory(new Category(nameEditText.getText().toString().trim(),0,1,new Date()));
+                onCategoryAddListener.AddCategory(
+                        new Category(nameEditText.getText().toString().trim(),
+                                0,
+                                new Date()),
+                        Double.parseDouble(budgetEditText.getText().toString().trim())
+                );
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -79,6 +90,9 @@ public class CreateCategoryDialog extends Dialog {
     }
 
     public interface OnCategoryAddListener {
-        public void AddCategory(Category category);
+        public void AddCategory(Category category, double budgetAmount);
+
+        public void UpdateCategory(Category category);
+
     }
 }

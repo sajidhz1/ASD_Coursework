@@ -18,9 +18,11 @@ import android.widget.TextView;
 import java.util.List;
 
 import expensetracker.iit.com.expensetracker.Dialogs.CreateCategoryDialog;
+import expensetracker.iit.com.expensetracker.Model.Budget;
 import expensetracker.iit.com.expensetracker.Model.Category;
 import expensetracker.iit.com.expensetracker.Model.Transaction;
 import expensetracker.iit.com.expensetracker.R;
+import expensetracker.iit.com.expensetracker.ViewModel.BudgetViewModel;
 import expensetracker.iit.com.expensetracker.ViewModel.CategoryViewModel;
 import expensetracker.iit.com.expensetracker.ViewModel.TransactionViewModel;
 
@@ -28,6 +30,7 @@ public class CategoriesFragment extends BaseFragment implements CreateCategoryDi
 
     private ListView categoriesListView;
     private CategoryViewModel mCategoryViewModel;
+    private BudgetViewModel mbudgetViewModel;
 
     public static CategoriesFragment newInstance() {
         CategoriesFragment fragment = new CategoriesFragment();
@@ -55,6 +58,7 @@ public class CategoriesFragment extends BaseFragment implements CreateCategoryDi
 
         // Get a new or existing ViewModel from the ViewModelProvider.
         mCategoryViewModel = ViewModelProviders.of(this).get(CategoryViewModel.class);
+        mbudgetViewModel = ViewModelProviders.of(this).get(BudgetViewModel.class);
 
         RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.categoriesList);
         final CategoryAdapter adapter = new CategoryAdapter(getContext(), mCategoryViewModel);
@@ -73,14 +77,23 @@ public class CategoriesFragment extends BaseFragment implements CreateCategoryDi
     @Override
     public void OpenAddNewDialog()
     {
-        CreateCategoryDialog ccd = new CreateCategoryDialog(getActivity(), this);
+        CreateCategoryDialog ccd = new CreateCategoryDialog(getActivity(), this, null);
         ccd.show();
     }
 
     @Override
-    public void AddCategory(Category category)
+    public void AddCategory(Category category, double budgetAmount)
     {
+        Budget newBudget = new Budget();
+        newBudget.setBudget(budgetAmount);
+        category.setBudgetId(mbudgetViewModel.insert(newBudget));
         mCategoryViewModel.insert(category);
+    }
+
+    @Override
+    public void UpdateCategory(Category category)
+    {
+        mCategoryViewModel.update(category);
     }
 
     public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {

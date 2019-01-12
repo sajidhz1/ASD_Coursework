@@ -35,6 +35,10 @@ public class CategoryRepository {
         new CategoryRepository.deleteTaskAsync(mCategoryDao).execute(category);
     }
 
+    public void update(Category category) {
+        new CategoryRepository.updateTaskAsync(mCategoryDao).execute(category);
+    }
+
     private static class insertAsyncTask extends AsyncTask<Category, Void, Void> {
 
         private CategoryDao mAsyncTaskDao;
@@ -60,6 +64,20 @@ public class CategoryRepository {
         @Override
         protected Void doInBackground(Category... transactions) {
             mAsyncTaskDao.delete(transactions[0]);
+            return null;
+        }
+    }
+
+    private static class updateTaskAsync extends AsyncTask<Category, Void, Void> {
+        private CategoryDao mAsyncTaskDao;
+
+        updateTaskAsync(CategoryDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(Category... categories) {
+            mAsyncTaskDao.update(categories[0]);
             return null;
         }
     }

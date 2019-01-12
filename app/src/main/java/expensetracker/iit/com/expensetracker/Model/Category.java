@@ -32,10 +32,9 @@ public class Category
     public Category() {
     }
 
-    public Category(String name, int type, int budgetId, Date createdDate) {
+    public Category(String name, int type, Date createdDate) {
         this.name = name;
         this.type = type;
-        this.budgetId = budgetId;
         this.createdDate = createdDate;
     }
 
