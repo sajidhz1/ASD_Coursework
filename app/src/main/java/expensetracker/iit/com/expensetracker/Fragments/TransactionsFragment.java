@@ -20,9 +20,11 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import android.text.format.DateFormat;
 
 import expensetracker.iit.com.expensetracker.Dialogs.CreateTransactionDialog;
 import expensetracker.iit.com.expensetracker.Model.Transaction;
@@ -138,11 +140,75 @@ public class TransactionsFragment extends BaseFragment implements CreateTransact
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             public boolean onMenuItemClick(MenuItem item) {
 
-                return true;
+                switch (item.getItemId()) {
+                    case R.id.january:
+                        recyclerView.removeAllViews();
+                        adapter.setTransactions(getTransactionByMonth(1));
+                        return true;
+                    case R.id.february:
+                        recyclerView.removeAllViews();
+                        adapter.setTransactions(getTransactionByMonth(2));
+                        return true;
+                    case R.id.march:
+                        recyclerView.removeAllViews();
+                        adapter.setTransactions(getTransactionByMonth(3));
+                        return true;
+                    case R.id.april:
+                        recyclerView.removeAllViews();
+                        adapter.setTransactions(getTransactionByMonth(4));
+                        return true;
+                    case R.id.may:
+                        recyclerView.removeAllViews();
+                        adapter.setTransactions(getTransactionByMonth(5));
+                        return true;
+                    case R.id.june:
+                        recyclerView.removeAllViews();
+                        adapter.setTransactions(getTransactionByMonth(6));
+                        return true;
+                    case R.id.july:
+                        recyclerView.removeAllViews();
+                        adapter.setTransactions(getTransactionByMonth(7));
+                        return true;
+                    case R.id.august:
+                        recyclerView.removeAllViews();
+                        adapter.setTransactions(getTransactionByMonth(8));
+                        return true;
+                    case R.id.september:
+                        recyclerView.removeAllViews();
+                        adapter.setTransactions(getTransactionByMonth(9));
+                        return true;
+                    case R.id.october:
+                        recyclerView.removeAllViews();
+                        adapter.setTransactions(getTransactionByMonth(10));
+                    case R.id.november:
+                        recyclerView.removeAllViews();
+                        adapter.setTransactions(getTransactionByMonth(11));
+                    case R.id.december:
+                        recyclerView.removeAllViews();
+                        adapter.setTransactions(getTransactionByMonth(12));
+                    case R.id.all:
+                        recyclerView.removeAllViews();
+                        adapter.setTransactions(mTransactionViewModel.getAllTransactions().getValue());
+                        return true;
+                    default:
+                        return false;
+                }
             }
         });
 
         popup.show();
+    }
+
+    private List<Transaction> getTransactionByMonth(int i)
+    {
+        ArrayList<Transaction> transactions = new ArrayList<>();
+        for (Transaction transaction : mTransactionViewModel.getAllTransactions().getValue()) {
+            if (Integer.parseInt(DateFormat.format("MM",   transaction.getAddedDate()).toString()) == i)
+            {
+                transactions.add(transaction);
+            }
+        }
+        return transactions;
     }
 
     @Override
