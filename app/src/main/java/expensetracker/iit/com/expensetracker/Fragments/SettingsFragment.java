@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import expensetracker.iit.com.expensetracker.Dialogs.ChangePinDialog;
 import expensetracker.iit.com.expensetracker.Model.User;
 import expensetracker.iit.com.expensetracker.Model.UserRegisterModel;
 import expensetracker.iit.com.expensetracker.R;
@@ -31,7 +32,7 @@ public class SettingsFragment extends BaseFragment {
 
     User currentUser = null;
     TextView username, pinNo;
-    Button clearData;
+    Button clearData, changePin;
     private TransactionViewModel mTransactionViewModel;
     private UserViewModel mUserViewModel;
     private CategoryViewModel mCategoryViewModel;
@@ -55,6 +56,7 @@ public class SettingsFragment extends BaseFragment {
         username = getView().findViewById(R.id.settingUsername);
         pinNo = getView().findViewById(R.id.settingPin);
         clearData = getView().findViewById(R.id.settingClearData);
+        changePin = getView().findViewById(R.id.settingChangePin);
 
         currentUser = UserRegisterModel.getCurrentUser();
         username.setText("User Name : " + currentUser.getUserName());
@@ -69,6 +71,15 @@ public class SettingsFragment extends BaseFragment {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
             builder.setMessage("Are you sure you want to clear data? This proccess is not reversible").setPositiveButton("Yes", dialogClickListener)
                     .setNegativeButton("No", dialogClickListener).show();
+        });
+
+        changePin.setOnClickListener((View v) -> {
+            ChangePinDialog cdd = new ChangePinDialog(getActivity(), this);
+            cdd.show();
+
+            cdd.setOnDismissListener((DialogInterface dialog) -> {
+                pinNo.setText("Pin No    : " + currentUser.getPinNo());
+            });
         });
     }
 

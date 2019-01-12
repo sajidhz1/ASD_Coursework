@@ -22,6 +22,8 @@ public class UserViewModel extends AndroidViewModel {
 
     public List<User> getUsersByPin(int pinNo){ return mRepository.getUsersByPin(pinNo); }
 
+    public void update(User user) { mRepository.update(user); }
+
     public LiveData<List<User>> getAll() { return mRepository.getAllUsers(); }
 
     public UserViewModel(@NonNull Application application) {
