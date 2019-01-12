@@ -28,7 +28,7 @@ public interface BudgetDao
     void insertAll(Budget... budgets);
 
     @Insert
-    int insert(Budget budget);
+    long insert(Budget budget);
 
     @Update
     void update(Budget budget);

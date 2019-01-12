@@ -29,7 +29,7 @@ public class BudgetRepository
 
 
     public int insert (Budget budget) {
-        return mbudgetDao.insert(budget);
+        return (int)mbudgetDao.insert(budget);
     }
 
     public void update (Budget budget){
