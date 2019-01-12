@@ -14,7 +14,7 @@ import expensetracker.iit.com.expensetracker.Model.Category;
 import expensetracker.iit.com.expensetracker.Model.Transaction;
 import expensetracker.iit.com.expensetracker.Model.User;
 
-@Database(entities = {Budget.class, Transaction.class, Category.class, User.class}, version = 1)
+@Database(entities = {Budget.class, Transaction.class, Category.class, User.class}, version = 3)
 public abstract class AppDatabase extends RoomDatabase
 {
     public abstract TransactionsDao transactionsDao();
@@ -24,13 +24,15 @@ public abstract class AppDatabase extends RoomDatabase
 
     private static volatile AppDatabase INSTANCE;
 
-    public static AppDatabase getDatabase(final Context context) {
-        if (INSTANCE == null) {
-            synchronized (AppDatabase.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            AppDatabase.class, "expensetracker_database_v5")
-                            .build();
+    public static AppDatabase getDatabase(final Context context)
+    {
+        if (INSTANCE == null)
+        {
+            synchronized (AppDatabase.class)
+            {
+                if (INSTANCE == null)
+                {
+                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "expensetracker_database_v5").build();
                 }
             }
         }

@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import java.util.Collections;
@@ -127,6 +128,21 @@ public class TransactionsFragment extends BaseFragment implements CreateTransact
     {
         CreateTransactionDialog cdd = new CreateTransactionDialog(getActivity(), this, null);
         cdd.show();
+    }
+
+    @Override
+    public void OnTitleClicked(View v)
+    {
+        PopupMenu popup = new PopupMenu(getContext(), v);
+        popup.getMenuInflater().inflate(R.menu.months_menu, popup.getMenu());
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+
+                return true;
+            }
+        });
+
+        popup.show();
     }
 
     @Override

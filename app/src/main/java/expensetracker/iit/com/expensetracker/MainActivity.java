@@ -1,11 +1,14 @@
 package expensetracker.iit.com.expensetracker;
 
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -19,7 +22,7 @@ import expensetracker.iit.com.expensetracker.Fragments.TransactionsFragment;
 
 public class MainActivity extends AppCompatActivity implements BaseFragment.OnCreateListener{
 
-    private TextView mTextMessage;
+    private TextView toolBarTitle;
     private Button addButton, editButton;
     Fragment selectedFragment = null;
 
@@ -31,15 +34,25 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnCr
 
             switch (item.getItemId()) {
                 case R.id.navigation_spending:
+                    toolBarTitle.setText(getResources().getString(R.string.title_spending));
+                    toolBarTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
                     selectedFragment = SpendingFragment.newInstance();
                     break;
                 case R.id.navigation_transactions:
+                    toolBarTitle.setText(getResources().getString(R.string.title_transactions));
+                    Drawable d  = getResources().getDrawable(R.drawable.ic_expand_more_black_24dp);
+                    d.setTint(Color.WHITE);
+                    toolBarTitle.setCompoundDrawablesWithIntrinsicBounds(null, null,d, null);
                     selectedFragment = TransactionsFragment.newInstance();
                     break;
                 case R.id.navigation_categories:
+                    toolBarTitle.setText(getResources().getString(R.string.title_categories));
+                    toolBarTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
                     selectedFragment = CategoriesFragment.newInstance();
                     break;
                 case R.id.navigation_settings:
+                    toolBarTitle.setText(R.string.settings);
+                    toolBarTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
                     selectedFragment = SettingsFragment.newInstance();
                     break;
             }
@@ -71,6 +84,15 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.OnCr
                 ((BaseFragment) selectedFragment).OpenAddNewDialog();
             }
         });
+
+        toolBarTitle = ((TextView) findViewById(R.id.toolbar_title));
+        toolBarTitle.setOnClickListener((View v) -> {
+            if(selectedFragment instanceof BaseFragment)
+            {
+                ((BaseFragment) selectedFragment).OnTitleClicked(v);
+            }
+        });
+
 
         editButton = (Button) findViewById(R.id.buttonEdit);
     }
