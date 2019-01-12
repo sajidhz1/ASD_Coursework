@@ -20,7 +20,7 @@ public class Category
     public String name;
 
     @ColumnInfo(name = "type")
-    public String type;
+    public int type;
 
     @ColumnInfo(name = "budget_id")
     public int budgetId;
@@ -32,7 +32,7 @@ public class Category
     public Category() {
     }
 
-    public Category(String name, String type, int budgetId, Date createdDate) {
+    public Category(String name, int type, int budgetId, Date createdDate) {
         this.name = name;
         this.type = type;
         this.budgetId = budgetId;
@@ -55,11 +55,11 @@ public class Category
         this.name = name;
     }
 
-    public String getType() {
+    public int getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(int type) {
         this.type = type;
     }
 

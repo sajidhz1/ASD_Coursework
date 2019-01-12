@@ -11,4 +11,5 @@
     <string name="skip">skip</string>
     <string name="Pin">hint</string>
     <string name="pin">Pin</string>
+    <string name="title_add_new_category">New Category</string>
 </resources>
