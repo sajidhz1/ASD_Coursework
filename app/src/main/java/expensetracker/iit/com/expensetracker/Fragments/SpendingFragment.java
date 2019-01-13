@@ -1,8 +1,12 @@
 package expensetracker.iit.com.expensetracker.Fragments;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,10 +17,17 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import expensetracker.iit.com.expensetracker.Model.Transaction;
 import expensetracker.iit.com.expensetracker.R;
+import expensetracker.iit.com.expensetracker.ViewModel.TransactionViewModel;
 
 public class SpendingFragment extends BaseFragment {
-
+    private TransactionViewModel mTransactionViewModel;
+    private List spendingsIncomeList;
+    private TransactionsFragment.TransactionAdapter adapter;
     public static SpendingFragment newInstance() {
         SpendingFragment fragment = new SpendingFragment();
         return fragment;
@@ -32,6 +43,17 @@ public class SpendingFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.spending_fragment, container, false);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // Get a new or existing ViewModel from the ViewModelProvider.
+        mTransactionViewModel = ViewModelProviders.of(this).get(TransactionViewModel.class);
+
+
+    }
+
 
     public class SpendingsAdapter extends BaseAdapter {
 
@@ -76,10 +98,11 @@ public class SpendingFragment extends BaseFragment {
             return (row);
         }
     }
-
+    List<Transaction> Temp;
     @Override
     public void OnTitleClicked(View v)
     {
+
         PopupMenu popup = new PopupMenu(getContext(), v);
         popup.getMenuInflater().inflate(R.menu.months_menu, popup.getMenu());
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -89,6 +112,7 @@ public class SpendingFragment extends BaseFragment {
                     case R.id.january:
                         //recyclerView.removeAllViews();
                         //adapter.setTransactions(getTransactionByMonth(1));
+                        Temp = getTransactionByMonth(1);
                         Toast.makeText(getActivity(), "January", Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.february:
@@ -144,4 +168,26 @@ public class SpendingFragment extends BaseFragment {
 
         popup.show();
     }
+
+    private List<Transaction> getTransactionByMonth(int i)
+    {
+        ArrayList<Transaction> transactions = new ArrayList<>();
+        try {
+            for (Transaction transaction : mTransactionViewModel.getAllTransactions().getValue()) {
+                if (Integer.parseInt(DateFormat.format("MM", transaction.getAddedDate()).toString()) == i) {
+                    transactions.add(transaction);
+                }
+            }
+            return transactions;
+        }
+        catch (Exception e)
+        {
+            Toast.makeText(getActivity(), e.toString(), Toast.LENGTH_SHORT).show();
+        }
+        finally {
+            return transactions;
+        }
+    }
+
+
 }
