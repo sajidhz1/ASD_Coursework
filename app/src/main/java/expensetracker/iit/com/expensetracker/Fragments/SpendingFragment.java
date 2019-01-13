@@ -97,7 +97,7 @@ public class SpendingFragment extends BaseFragment {
             return (row);
         }
     }
-    List<Transaction> Temp;
+
     @Override
     public void OnTitleClicked(View v)
     {
@@ -184,12 +184,12 @@ public class SpendingFragment extends BaseFragment {
         List<String> subItemExpenses = new ArrayList<String>();
         // Setting Income List
         for(int i=0; i < transactions.size(); i++) {
-            if (transactions.get(i).getAmount() < 0) // Assumed getting all the expenses
+            if (transactions.get(i).getAmount() < 0) // Assumed getting all the income
             {
                 itemIncome.add(Integer.toString(transactions.get(i).getCategoryID()));
                 subItemIncome.add(Double.toString(transactions.get(i).getAmount()));
             }
-            if (transactions.get(i).getAmount() >= 0) // Assumed getting all the expenses
+            else // Assumed getting all the expenses
             {
                 itemExpenses.add(Integer.toString(transactions.get(i).getCategoryID()));
                 subItemExpenses.add(Double.toString(transactions.get(i).getAmount()));
