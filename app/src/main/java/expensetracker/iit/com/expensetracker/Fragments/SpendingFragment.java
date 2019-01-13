@@ -26,7 +26,8 @@ import expensetracker.iit.com.expensetracker.ViewModel.TransactionViewModel;
 
 public class SpendingFragment extends BaseFragment {
     private TransactionViewModel mTransactionViewModel;
-    private List spendingsIncomeList;
+    private List spendingsIncomeListVar;
+    private List spendingsExpenseListVar;
     private TransactionsFragment.TransactionAdapter adapter;
     public static SpendingFragment newInstance() {
         SpendingFragment fragment = new SpendingFragment();
@@ -50,7 +51,8 @@ public class SpendingFragment extends BaseFragment {
 
         // Get a new or existing ViewModel from the ViewModelProvider.
         mTransactionViewModel = ViewModelProviders.of(this).get(TransactionViewModel.class);
-
+        spendingsExpenseListVar  =  getView().findViewById(R.id.spendingsExpenseList);
+        spendingsIncomeListVar  =  getView().findViewById(R.id.spendingsIncomeList);
 
     }
 
@@ -172,22 +174,68 @@ public class SpendingFragment extends BaseFragment {
     private List<Transaction> getTransactionByMonth(int i)
     {
         ArrayList<Transaction> transactions = new ArrayList<>();
-        try {
-            for (Transaction transaction : mTransactionViewModel.getAllTransactions().getValue()) {
-                if (Integer.parseInt(DateFormat.format("MM", transaction.getAddedDate()).toString()) == i) {
-                    transactions.add(transaction);
-                }
+        for (Transaction transaction : mTransactionViewModel.getAllTransactions().getValue()) {
+            if (Integer.parseInt(DateFormat.format("MM", transaction.getAddedDate()).toString()) == i) {
+                transactions.add(transaction);
             }
-            return transactions;
         }
-        catch (Exception e)
-        {
-            Toast.makeText(getActivity(), e.toString(), Toast.LENGTH_SHORT).show();
-        }
-        finally {
-            return transactions;
-        }
+        return transactions;
     }
 
+    private Boolean SetListValues(ArrayList<Transaction> transactions)
+    {
+        String itemIncome[];
+        int subItemIncome[];
+        // Setting Income List
+        for(int i=0; i < transactions.size(); i++) {
+            if (transactions.get(i).getCategoryID() == 1) // Assumed Income is Category 1.
+            {
 
+            }
+        }
+
+
+        return true;
+    }
+
+    public class CustomAdapter extends BaseAdapter {
+        Context context;
+        String Item[];
+        String SubItem[];
+        int flags[];
+        LayoutInflater inflter;
+
+        public CustomAdapter(Context applicationContext, String[] Item, String[] SubItem , int[] flags) {
+            this.context = context;
+            this.Item = Item;
+            this.SubItem = SubItem;
+            this.flags = flags;
+            inflter = (LayoutInflater.from(applicationContext));
+        }
+
+        @Override
+        public int getCount() {
+            return Item.length;
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            view = inflter.inflate(R.layout.spending_fragment, null);
+            TextView item = (TextView) view.findViewById(R.id.itemListView);
+            TextView subitem = (TextView) view.findViewById(R.id.subItemListView);
+            item.setText(Item[i]);
+            subitem.setText(SubItem[i]);
+            return view;
+        }
+    }
 }
