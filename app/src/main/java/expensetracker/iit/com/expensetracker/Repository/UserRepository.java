@@ -30,6 +30,15 @@ public class UserRepository {
     public void delete (User obj) {
         new UserRepository.deleteTaskAsync(mUserDao).execute(obj);
     }
+
+    public void update(User obj) {
+        new UserRepository.updateTaskAsync(mUserDao).execute(obj);
+    }
+
+    public void deleteAll() {
+        new UserRepository.deleteAllTaskAsync(mUserDao).execute();
+    }
+
     public LiveData<List<User>> getAllUsers() {
         return mUserDao.getAllLive();
     }
@@ -48,6 +57,7 @@ public class UserRepository {
             return null;
         }
     }
+
     private static class deleteTaskAsync extends AsyncTask<User, Void, Void> {
         private UserDao mAsyncTaskDao;
 
@@ -55,10 +65,37 @@ public class UserRepository {
             mAsyncTaskDao = dao;
         }
 
-
         @Override
         protected Void doInBackground(User... users) {
             mAsyncTaskDao.insert(users[0]);
+            return null;
+        }
+    }
+
+    private static class deleteAllTaskAsync extends AsyncTask<Void, Void, Void> {
+        private UserDao mAsyncTaskDao;
+
+        deleteAllTaskAsync(UserDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            mAsyncTaskDao.deleteAll();
+            return null;
+        }
+    }
+
+    private static class updateTaskAsync extends AsyncTask<User, Void, Void> {
+        private UserDao mAsyncTaskDao;
+
+        updateTaskAsync(UserDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(User... users) {
+            mAsyncTaskDao.update(users[0]);
             return null;
         }
     }

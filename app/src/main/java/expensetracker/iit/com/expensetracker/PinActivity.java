@@ -19,6 +19,7 @@ import java.util.List;
 
 import expensetracker.iit.com.expensetracker.Model.Transaction;
 import expensetracker.iit.com.expensetracker.Model.User;
+import expensetracker.iit.com.expensetracker.Model.UserRegisterModel;
 import expensetracker.iit.com.expensetracker.ViewModel.UserViewModel;
 
 
@@ -63,7 +64,7 @@ public class PinActivity extends AppCompatActivity {
             }
 
 
-            User currentUser = UserRegister.getCurrentUser();
+            User currentUser = UserRegisterModel.getCurrentUser();
             if(currentUser != null && currentUser.getPinNo() == Integer.parseInt(pinPassword.getText().toString())){
                 Intent i = new Intent(PinActivity.this, MainActivity.class);
                 startActivity(i);
