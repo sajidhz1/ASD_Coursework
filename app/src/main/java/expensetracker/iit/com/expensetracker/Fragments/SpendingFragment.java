@@ -1,11 +1,8 @@
 package expensetracker.iit.com.expensetracker.Fragments;
 
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -13,9 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +23,8 @@ import expensetracker.iit.com.expensetracker.ViewModel.TransactionViewModel;
 
 public class SpendingFragment extends BaseFragment {
     private TransactionViewModel mTransactionViewModel;
-    private List spendingsIncomeListVar;
-    private List spendingsExpenseListVar;
+    private ListView spendingsIncomeListVar;
+    private ListView spendingsExpenseListVar;
     private TransactionsFragment.TransactionAdapter adapter;
     public static SpendingFragment newInstance() {
         SpendingFragment fragment = new SpendingFragment();
@@ -112,55 +109,43 @@ public class SpendingFragment extends BaseFragment {
 
                 switch (item.getItemId()) {
                     case R.id.january:
-                        //recyclerView.removeAllViews();
-                        //adapter.setTransactions(getTransactionByMonth(1));
-                        Temp = getTransactionByMonth(1);
-                        Toast.makeText(getActivity(), "January", Toast.LENGTH_SHORT).show();
+                        SetListValues(getTransactionByMonth(1));
                         return true;
                     case R.id.february:
-                        //recyclerView.removeAllViews();
-                        //adapter.setTransactions(getTransactionByMonth(2));
+                        SetListValues(getTransactionByMonth(2));
                         return true;
                     case R.id.march:
-                        //recyclerView.removeAllViews();
-                        //adapter.setTransactions(getTransactionByMonth(3));
+                        SetListValues(getTransactionByMonth(3));
                         return true;
                     case R.id.april:
-                        //recyclerView.removeAllViews();
-                        //adapter.setTransactions(getTransactionByMonth(4));
+                        SetListValues(getTransactionByMonth(4));
                         return true;
                     case R.id.may:
-                        //recyclerView.removeAllViews();
-                        //adapter.setTransactions(getTransactionByMonth(5));
+                        SetListValues(getTransactionByMonth(5));
                         return true;
                     case R.id.june:
-                        //recyclerView.removeAllViews();
-                        //adapter.setTransactions(getTransactionByMonth(6));
+                        SetListValues(getTransactionByMonth(6));
                         return true;
                     case R.id.july:
-                        //recyclerView.removeAllViews();
-                        //adapter.setTransactions(getTransactionByMonth(7));
+                        SetListValues(getTransactionByMonth(7));
                         return true;
                     case R.id.august:
-                        //recyclerView.removeAllViews();
-                        //adapter.setTransactions(getTransactionByMonth(8));
+                        SetListValues(getTransactionByMonth(8));
                         return true;
                     case R.id.september:
-                        //recyclerView.removeAllViews();
-                        //adapter.setTransactions(getTransactionByMonth(9));
+                        SetListValues(getTransactionByMonth(9));
                         return true;
                     case R.id.october:
-                        //recyclerView.removeAllViews();
-                        //adapter.setTransactions(getTransactionByMonth(10));
+                        SetListValues(getTransactionByMonth(10));
+                        return true;
                     case R.id.november:
-                        //recyclerView.removeAllViews();
-                        //adapter.setTransactions(getTransactionByMonth(11));
+                        SetListValues(getTransactionByMonth(11));
+                        return true;
                     case R.id.december:
-                        //recyclerView.removeAllViews();
-                        //adapter.setTransactions(getTransactionByMonth(12));
+                        SetListValues(getTransactionByMonth(12));
+                        return true;
                     case R.id.all:
-                        //recyclerView.removeAllViews();
-                        //adapter.setTransactions(mTransactionViewModel.getAllTransactions().getValue());
+                        SetListValues(getAllTransactions());
                         return true;
                     default:
                         return false;
@@ -171,7 +156,7 @@ public class SpendingFragment extends BaseFragment {
         popup.show();
     }
 
-    private List<Transaction> getTransactionByMonth(int i)
+    private ArrayList<Transaction> getTransactionByMonth(int i)
     {
         ArrayList<Transaction> transactions = new ArrayList<>();
         for (Transaction transaction : mTransactionViewModel.getAllTransactions().getValue()) {
@@ -182,40 +167,54 @@ public class SpendingFragment extends BaseFragment {
         return transactions;
     }
 
+    private ArrayList<Transaction> getAllTransactions()
+    {
+        ArrayList<Transaction> transactions = new ArrayList<>();
+        for (Transaction transaction : mTransactionViewModel.getAllTransactions().getValue()) {
+            transactions.add(transaction);
+        }
+        return transactions;
+    }
+
     private Boolean SetListValues(ArrayList<Transaction> transactions)
     {
-        String itemIncome[];
-        int subItemIncome[];
+        List<String> itemIncome = new ArrayList<String>();
+        List<String> subItemIncome = new ArrayList<String>();
+        List<String> itemExpenses = new ArrayList<String>();
+        List<String> subItemExpenses = new ArrayList<String>();
         // Setting Income List
         for(int i=0; i < transactions.size(); i++) {
-            if (transactions.get(i).getCategoryID() == 1) // Assumed Income is Category 1.
+            if (transactions.get(i).getAmount() < 0) // Assumed getting all the expenses
             {
-
+                itemIncome.add(Integer.toString(transactions.get(i).getCategoryID()));
+                subItemIncome.add(Double.toString(transactions.get(i).getAmount()));
+            }
+            if (transactions.get(i).getAmount() >= 0) // Assumed getting all the expenses
+            {
+                itemExpenses.add(Integer.toString(transactions.get(i).getCategoryID()));
+                subItemExpenses.add(Double.toString(transactions.get(i).getAmount()));
             }
         }
 
-
+        CustomListViewAdapter incomeAdapter = new CustomListViewAdapter(itemIncome,subItemIncome);
+        spendingsIncomeListVar.setAdapter(incomeAdapter);
+        CustomListViewAdapter expenseAdapter = new CustomListViewAdapter(itemExpenses,subItemExpenses);
+        spendingsExpenseListVar.setAdapter(expenseAdapter);
         return true;
     }
 
-    public class CustomAdapter extends BaseAdapter {
-        Context context;
-        String Item[];
-        String SubItem[];
-        int flags[];
-        LayoutInflater inflter;
+    public class CustomListViewAdapter extends BaseAdapter {
+        List<String> Item;
+        List<String> SubItem;
 
-        public CustomAdapter(Context applicationContext, String[] Item, String[] SubItem , int[] flags) {
-            this.context = context;
+        public CustomListViewAdapter(List<String> Item, List<String> SubItem) {
             this.Item = Item;
             this.SubItem = SubItem;
-            this.flags = flags;
-            inflter = (LayoutInflater.from(applicationContext));
         }
 
         @Override
         public int getCount() {
-            return Item.length;
+            return Item.size();
         }
 
         @Override
@@ -230,11 +229,10 @@ public class SpendingFragment extends BaseFragment {
 
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
-            view = inflter.inflate(R.layout.spending_fragment, null);
             TextView item = (TextView) view.findViewById(R.id.itemListView);
             TextView subitem = (TextView) view.findViewById(R.id.subItemListView);
-            item.setText(Item[i]);
-            subitem.setText(SubItem[i]);
+            item.setText(Item.get(i));
+            subitem.setText(SubItem.get(i));
             return view;
         }
     }
