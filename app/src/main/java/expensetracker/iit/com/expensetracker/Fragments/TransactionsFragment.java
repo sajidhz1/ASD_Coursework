@@ -6,6 +6,9 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.view.SupportMenuInflater;
 import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.view.menu.MenuPopupHelper;
@@ -29,6 +32,7 @@ import android.text.format.DateFormat;
 import expensetracker.iit.com.expensetracker.Dialogs.CreateTransactionDialog;
 import expensetracker.iit.com.expensetracker.Model.Transaction;
 import expensetracker.iit.com.expensetracker.R;
+import expensetracker.iit.com.expensetracker.ViewModel.CategoryViewModel;
 import expensetracker.iit.com.expensetracker.ViewModel.TransactionViewModel;
 
 public class TransactionsFragment extends BaseFragment implements CreateTransactionDialog.OnTransactionAddListener {
@@ -129,6 +133,7 @@ public class TransactionsFragment extends BaseFragment implements CreateTransact
     public void OpenAddNewDialog()
     {
         CreateTransactionDialog cdd = new CreateTransactionDialog(getActivity(), this, null);
+        cdd.setCategoriedViewModel(ViewModelProviders.of(this).get(CategoryViewModel.class));
         cdd.show();
     }
 
@@ -272,6 +277,7 @@ public class TransactionsFragment extends BaseFragment implements CreateTransact
                 holder.amountTextView.setText(current.getAmount() + " $");
                 holder.editButton.setOnClickListener((View v) -> {
                     CreateTransactionDialog cdd = new CreateTransactionDialog(mContext, onTransactionAddListener, current);
+                    cdd.setCategoriedViewModel(ViewModelProviders.of((FragmentActivity) mContext).get(CategoryViewModel.class));
                     cdd.show();
                 });
 
