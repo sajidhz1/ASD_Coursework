@@ -88,16 +88,18 @@ public class CreateTransactionDialog extends Dialog {
 
         saveButton.setOnClickListener((View v) -> {
             SimpleDateFormat sdf = new SimpleDateFormat(Constants.DATE_FORMAT, Locale.US);
+            Category c = (Category) categoriesSpinner.getSelectedItem();
             try {
                 if(transaction == null)
                 {
-                    onTransactionAddListener.AddTransaction(new Transaction(Double.parseDouble(amountEditText.getText().toString()), 1, noteEditText.getText().toString(), recurrentCheckBox.isChecked(), sdf.parse(dateEditText.getText().toString())));
+                    onTransactionAddListener.AddTransaction(new Transaction(Double.parseDouble(amountEditText.getText().toString()), c.getCid(), noteEditText.getText().toString(), recurrentCheckBox.isChecked(), sdf.parse(dateEditText.getText().toString())));
                 }
                 else {
                     transaction.setNote(noteEditText.getText().toString());
                     transaction.setAddedDate(sdf.parse(dateEditText.getText().toString()));
                     transaction.setAmount(Double.parseDouble(amountEditText.getText().toString()));
                     transaction.setRecurring(recurrentCheckBox.isChecked());
+                    transaction.setCategoryID(c.getCid());
                     onTransactionAddListener.UpdateTransaction(transaction);
                 }
             } catch (ParseException e) {

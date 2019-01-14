@@ -1,9 +1,12 @@
 package expensetracker.iit.com.expensetracker.Fragments;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
@@ -25,6 +28,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+
 import android.text.format.DateFormat;
 
 import expensetracker.iit.com.expensetracker.Dialogs.CreateTransactionDialog;
@@ -278,6 +283,7 @@ public class TransactionsFragment extends BaseFragment implements CreateTransact
             return new TransactionViewHolder(itemView);
         }
 
+        @TargetApi(Build.VERSION_CODES.N)
         @Override
         public void onBindViewHolder(TransactionViewHolder holder, int position) {
             if (mTransactions != null) {
@@ -294,6 +300,20 @@ public class TransactionsFragment extends BaseFragment implements CreateTransact
                 holder.deleteButton.setOnClickListener((View v) -> {
                     viewModel.delete(current);
                 });
+
+                Optional<Category> c =  categories.stream().filter(category -> category.cid == current.getCategoryID()).findFirst();
+                if(c.get() != null)
+                {
+                    if(c.get().type == 1)
+                    {
+                        holder.transactionNoteTextView.setTextColor(Color.GREEN);
+                    }
+                    else
+                    {
+                        holder.transactionNoteTextView.setTextColor(Color.RED);
+                    }
+                }
+
             } else {
                 // Covers the case of data not being ready yet.
                 holder.transactionNoteTextView.setText("No Word");
