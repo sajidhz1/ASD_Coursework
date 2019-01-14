@@ -28,7 +28,7 @@ public class CategoryRepository {
     }
 
     public void insert(Category category){
-        new CategoryRepository.insertAsyncTask(mCategoryDao).equals(category);
+        new CategoryRepository.insertAsyncTask(mCategoryDao).execute(category);
     }
 
     public void delete(Category category) {

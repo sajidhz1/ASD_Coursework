@@ -29,6 +29,6 @@ public class TransactionViewModel extends AndroidViewModel
     public TransactionViewModel(@NonNull Application application) {
         super(application);
         mRepository = new TransactionRepository(application);
-        mAllTransactions = mRepository.getAllBudgets();
+        mAllTransactions = mRepository.getAllTransactions();
     }
 }

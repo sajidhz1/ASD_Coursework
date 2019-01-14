@@ -1,11 +1,15 @@
 package expensetracker.iit.com.expensetracker.Fragments;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.view.SupportMenuInflater;
 import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.view.menu.MenuPopupHelper;
@@ -22,13 +26,17 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+
 import android.text.format.DateFormat;
 
 import expensetracker.iit.com.expensetracker.Dialogs.CreateTransactionDialog;
+import expensetracker.iit.com.expensetracker.Model.Category;
 import expensetracker.iit.com.expensetracker.Model.Transaction;
 import expensetracker.iit.com.expensetracker.R;
+import expensetracker.iit.com.expensetracker.ViewModel.CategoryViewModel;
 import expensetracker.iit.com.expensetracker.ViewModel.TransactionViewModel;
 
 public class TransactionsFragment extends BaseFragment implements CreateTransactionDialog.OnTransactionAddListener {
@@ -36,7 +44,10 @@ public class TransactionsFragment extends BaseFragment implements CreateTransact
     private RecyclerView recyclerView;
     private TextView sort;
     private TransactionViewModel mTransactionViewModel;
+    private CategoryViewModel mCategoryViewModel;
     private TransactionAdapter adapter;
+
+    private List<Category> categories;
 
     public static TransactionsFragment newInstance() {
         TransactionsFragment fragment = new TransactionsFragment();
@@ -66,11 +77,19 @@ public class TransactionsFragment extends BaseFragment implements CreateTransact
 
         // Get a new or existing ViewModel from the ViewModelProvider.
         mTransactionViewModel = ViewModelProviders.of(this).get(TransactionViewModel.class);
+        mCategoryViewModel = ViewModelProviders.of(this).get(CategoryViewModel.class);
 
         recyclerView = (RecyclerView) getView().findViewById(R.id.transactionsList);
         adapter = new TransactionAdapter(getContext(), mTransactionViewModel, this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        mCategoryViewModel.getAllCategories().observe(this, new Observer<List<Category>>() {
+            @Override
+            public void onChanged(@Nullable final List<Category> items) {
+                categories = items;
+            }
+        });
 
         mTransactionViewModel.getAllTransactions().observe(this, new Observer<List<Transaction>>() {
             @Override
@@ -129,6 +148,7 @@ public class TransactionsFragment extends BaseFragment implements CreateTransact
     public void OpenAddNewDialog()
     {
         CreateTransactionDialog cdd = new CreateTransactionDialog(getActivity(), this, null);
+        cdd.setCategories(categories);
         cdd.show();
     }
 
@@ -263,6 +283,7 @@ public class TransactionsFragment extends BaseFragment implements CreateTransact
             return new TransactionViewHolder(itemView);
         }
 
+        @TargetApi(Build.VERSION_CODES.N)
         @Override
         public void onBindViewHolder(TransactionViewHolder holder, int position) {
             if (mTransactions != null) {
@@ -272,12 +293,27 @@ public class TransactionsFragment extends BaseFragment implements CreateTransact
                 holder.amountTextView.setText(current.getAmount() + " $");
                 holder.editButton.setOnClickListener((View v) -> {
                     CreateTransactionDialog cdd = new CreateTransactionDialog(mContext, onTransactionAddListener, current);
+                    cdd.setCategories(categories);
                     cdd.show();
                 });
 
                 holder.deleteButton.setOnClickListener((View v) -> {
                     viewModel.delete(current);
                 });
+
+                Optional<Category> c =  categories.stream().filter(category -> category.cid == current.getCategoryID()).findFirst();
+                if(c.get() != null)
+                {
+                    if(c.get().type == 1)
+                    {
+                        holder.transactionNoteTextView.setTextColor(Color.GREEN);
+                    }
+                    else
+                    {
+                        holder.transactionNoteTextView.setTextColor(Color.RED);
+                    }
+                }
+
             } else {
                 // Covers the case of data not being ready yet.
                 holder.transactionNoteTextView.setText("No Word");
