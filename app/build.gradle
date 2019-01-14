@@ -37,4 +37,6 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:$archLifecycleVersion"
     annotationProcessor "android.arch.lifecycle:compiler:$archLifecycleVersion"
     // use kapt for Kotlin
+
+    debugImplementation 'com.amitshekhar.android:debug-db:1.0.4'
 }

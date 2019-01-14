@@ -6,8 +6,6 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.view.SupportMenuInflater;
 import android.support.v7.view.menu.MenuBuilder;
@@ -25,11 +23,12 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import android.text.format.DateFormat;
 
 import expensetracker.iit.com.expensetracker.Dialogs.CreateTransactionDialog;
+import expensetracker.iit.com.expensetracker.Model.Category;
 import expensetracker.iit.com.expensetracker.Model.Transaction;
 import expensetracker.iit.com.expensetracker.R;
 import expensetracker.iit.com.expensetracker.ViewModel.CategoryViewModel;
@@ -40,7 +39,10 @@ public class TransactionsFragment extends BaseFragment implements CreateTransact
     private RecyclerView recyclerView;
     private TextView sort;
     private TransactionViewModel mTransactionViewModel;
+    private CategoryViewModel mCategoryViewModel;
     private TransactionAdapter adapter;
+
+    private List<Category> categories;
 
     public static TransactionsFragment newInstance() {
         TransactionsFragment fragment = new TransactionsFragment();
@@ -70,11 +72,19 @@ public class TransactionsFragment extends BaseFragment implements CreateTransact
 
         // Get a new or existing ViewModel from the ViewModelProvider.
         mTransactionViewModel = ViewModelProviders.of(this).get(TransactionViewModel.class);
+        mCategoryViewModel = ViewModelProviders.of(this).get(CategoryViewModel.class);
 
         recyclerView = (RecyclerView) getView().findViewById(R.id.transactionsList);
         adapter = new TransactionAdapter(getContext(), mTransactionViewModel, this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        mCategoryViewModel.getAllCategories().observe(this, new Observer<List<Category>>() {
+            @Override
+            public void onChanged(@Nullable final List<Category> items) {
+                categories = items;
+            }
+        });
 
         mTransactionViewModel.getAllTransactions().observe(this, new Observer<List<Transaction>>() {
             @Override
@@ -133,7 +143,7 @@ public class TransactionsFragment extends BaseFragment implements CreateTransact
     public void OpenAddNewDialog()
     {
         CreateTransactionDialog cdd = new CreateTransactionDialog(getActivity(), this, null);
-        cdd.setCategoriedViewModel(ViewModelProviders.of(this).get(CategoryViewModel.class));
+        cdd.setCategories(categories);
         cdd.show();
     }
 
@@ -277,7 +287,7 @@ public class TransactionsFragment extends BaseFragment implements CreateTransact
                 holder.amountTextView.setText(current.getAmount() + " $");
                 holder.editButton.setOnClickListener((View v) -> {
                     CreateTransactionDialog cdd = new CreateTransactionDialog(mContext, onTransactionAddListener, current);
-                    cdd.setCategoriedViewModel(ViewModelProviders.of((FragmentActivity) mContext).get(CategoryViewModel.class));
+                    cdd.setCategories(categories);
                     cdd.show();
                 });
 

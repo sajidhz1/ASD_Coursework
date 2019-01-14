@@ -12,16 +12,16 @@ import expensetracker.iit.com.expensetracker.Model.Transaction;
 
 public class TransactionRepository {
     private TransactionsDao mTransactionDao;
-    private LiveData<List<Transaction>> mAllBudgets;
+    private LiveData<List<Transaction>> mAllTransactions;
 
     public TransactionRepository(Application application) {
         AppDatabase db = AppDatabase.getDatabase(application);
         mTransactionDao = db.transactionsDao();
-        mAllBudgets = mTransactionDao.getAllLive();
+        mAllTransactions = mTransactionDao.getAllLive();
     }
 
-    public LiveData<List<Transaction>> getAllBudgets() {
-        return mAllBudgets;
+    public LiveData<List<Transaction>> getAllTransactions() {
+        return mAllTransactions;
     }
 
 

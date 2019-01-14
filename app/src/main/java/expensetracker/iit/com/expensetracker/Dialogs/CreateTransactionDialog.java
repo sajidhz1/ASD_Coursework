@@ -2,12 +2,10 @@ package expensetracker.iit.com.expensetracker.Dialogs;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -17,6 +15,7 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -26,12 +25,10 @@ import java.util.List;
 import java.util.Locale;
 
 import expensetracker.iit.com.expensetracker.Common.Constants;
-import expensetracker.iit.com.expensetracker.Fragments.SpendingFragment;
 import expensetracker.iit.com.expensetracker.Model.Category;
 import expensetracker.iit.com.expensetracker.Model.Transaction;
 import expensetracker.iit.com.expensetracker.R;
 import expensetracker.iit.com.expensetracker.ViewModel.CategoryViewModel;
-import expensetracker.iit.com.expensetracker.ViewModel.TransactionViewModel;
 
 public class CreateTransactionDialog extends Dialog {
 
@@ -44,11 +41,11 @@ public class CreateTransactionDialog extends Dialog {
 
     final Calendar calendar = Calendar.getInstance();
     private OnTransactionAddListener onTransactionAddListener;
-    private CategoryViewModel categoryViewModel;
+    private List<Category> categories;
 
-    public void setCategoriedViewModel(CategoryViewModel categoryViewModel)
+    public void setCategories(List<Category> categories)
     {
-        this.categoryViewModel = categoryViewModel;
+        this.categories = categories;
     }
 
     public CreateTransactionDialog(@NonNull Context context, OnTransactionAddListener onTransactionAddListener, Transaction transaction) {
@@ -75,11 +72,9 @@ public class CreateTransactionDialog extends Dialog {
         saveButton = findViewById(R.id.btn_yes);
         cancelButton = findViewById(R.id.btn_no);
 
-        List<Category> categories = categoryViewModel.getAllCategories().getValue();
         if(categories != null)
         {
-            ArrayAdapter spinnerArrayAdapter = new ArrayAdapter(getContext(),
-                    android.R.layout.simple_spinner_item, categories.toArray());
+            SpinAdapter spinnerArrayAdapter = new SpinAdapter(getContext(),android.R.layout.simple_spinner_item, categories);
             categoriesSpinner.setAdapter(spinnerArrayAdapter);
         }
 
@@ -164,5 +159,51 @@ public class CreateTransactionDialog extends Dialog {
     public interface OnTransactionAddListener {
         public void AddTransaction(Transaction transaction);
         public void UpdateTransaction(Transaction transaction);
+    }
+
+    public class SpinAdapter extends ArrayAdapter<Category>{
+
+        private Context context;
+        private List<Category> values;
+
+        public SpinAdapter(Context context, int textViewResourceId,
+                           List<Category> values) {
+            super(context, textViewResourceId, values);
+            this.context = context;
+            this.values = values;
+        }
+
+        @Override
+        public int getCount(){
+            return values.size();
+        }
+
+        @Override
+        public Category getItem(int position){
+            return values.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            TextView label = (TextView) super.getView(position, convertView, parent);
+            label.setTextColor(Color.BLACK);
+            label.setText(values.get(position).getName());
+            return label;
+        }
+
+        @Override
+        public View getDropDownView(int position, View convertView,
+                                    ViewGroup parent) {
+            TextView label = (TextView) super.getDropDownView(position, convertView, parent);
+            label.setTextColor(Color.BLACK);
+            label.setText(values.get(position).getName());
+
+            return label;
+        }
     }
 }
