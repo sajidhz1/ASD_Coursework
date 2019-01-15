@@ -63,14 +63,13 @@ public class CreateCategoryDialog extends Dialog {
             try {
                 onCategoryAddListener.AddCategory(
                         new Category(nameEditText.getText().toString().trim(),
-                                Integer.parseInt(typeSpinner.getSelectedItem().toString()),
+                                Integer.parseInt(typeSpinner.getSelectedItemPosition() + ""),
                                 new Date()),
                         Double.parseDouble(budgetEditText.getText().toString().trim())
                 );
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
             dismiss();
         });
 
