@@ -5,17 +5,13 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
+import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +22,9 @@ import expensetracker.iit.com.expensetracker.ViewModel.TransactionViewModel;
 
 public class SpendingFragment extends BaseFragment {
     private TransactionViewModel mTransactionViewModel;
-    private List spendingsIncomeList;
-    private TransactionsFragment.TransactionAdapter adapter;
+    private SpendingsAdapter spendingsAdapter;
+    private SpendingsAdapter expenseAdapter;
+
     public static SpendingFragment newInstance() {
         SpendingFragment fragment = new SpendingFragment();
         return fragment;
@@ -48,38 +45,49 @@ public class SpendingFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
 
-        // Get a new or existing ViewModel from the ViewModelProvider.
+        spendingsAdapter = new SpendingsAdapter(getContext());
+        spendingsAdapter.setTransactions(new ArrayList<Transaction>());
+        expenseAdapter = new SpendingsAdapter(getContext());
+        expenseAdapter.setTransactions(new ArrayList<Transaction>());
+
+        ((ListView) getView().findViewById(R.id.spendingsIncomeList)).setAdapter(spendingsAdapter);
+        ((ListView) getView().findViewById(R.id.spendingsExpenseList)).setAdapter(expenseAdapter);
+
         mTransactionViewModel = ViewModelProviders.of(this).get(TransactionViewModel.class);
+        mTransactionViewModel.getTransactionByCategoryType(1).observe(this, new Observer<List<Transaction>>() {
+            @Override
+            public void onChanged(@Nullable final List<Transaction> transactions) {
+                spendingsAdapter.setTransactions(transactions);
+            }
+        });
 
-
+        mTransactionViewModel.getTransactionByCategoryType(2).observe(this, new Observer<List<Transaction>>() {
+            @Override
+            public void onChanged(@Nullable final List<Transaction> transactions) {
+                expenseAdapter.setTransactions(transactions);
+            }
+        });
     }
 
 
     public class SpendingsAdapter extends BaseAdapter {
 
         private Context mContext;
-        private String[]  Title;
-        private int[] imge;
+        private List<Transaction> transactions;
 
-        public SpendingsAdapter(Context context, String[] text1, int[] imageIds) {
+        public SpendingsAdapter(Context context) {
             mContext = context;
-            Title = text1;
-            imge = imageIds;
-
         }
 
         public int getCount() {
-            // TODO Auto-generated method stub
-            return Title.length;
+            return transactions.size();
         }
 
         public Object getItem(int arg0) {
-            // TODO Auto-generated method stub
             return null;
         }
 
         public long getItemId(int position) {
-            // TODO Auto-generated method stub
             return position;
         }
 
@@ -87,107 +95,19 @@ public class SpendingFragment extends BaseFragment {
 
             LayoutInflater inflater = getLayoutInflater();
             View row;
-            row = inflater.inflate(R.layout.transactions_row, parent, false);
+            row = inflater.inflate(R.layout.spendings_row, parent, false);
             TextView title;
             ImageView i1;
             i1 = (ImageView) row.findViewById(R.id.imgIcon);
             title = (TextView) row.findViewById(R.id.txtTitle);
-            title.setText(Title[position]);
-            i1.setImageResource(imge[position]);
-
+            title.setText(transactions.get(position).getNote());
             return (row);
         }
-    }
-    List<Transaction> Temp;
-    @Override
-    public void OnTitleClicked(View v)
-    {
 
-        PopupMenu popup = new PopupMenu(getContext(), v);
-        popup.getMenuInflater().inflate(R.menu.months_menu, popup.getMenu());
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            public boolean onMenuItemClick(MenuItem item) {
-
-                switch (item.getItemId()) {
-                    case R.id.january:
-                        //recyclerView.removeAllViews();
-                        //adapter.setTransactions(getTransactionByMonth(1));
-                        Temp = getTransactionByMonth(1);
-                        Toast.makeText(getActivity(), "January", Toast.LENGTH_SHORT).show();
-                        return true;
-                    case R.id.february:
-                        //recyclerView.removeAllViews();
-                        //adapter.setTransactions(getTransactionByMonth(2));
-                        return true;
-                    case R.id.march:
-                        //recyclerView.removeAllViews();
-                        //adapter.setTransactions(getTransactionByMonth(3));
-                        return true;
-                    case R.id.april:
-                        //recyclerView.removeAllViews();
-                        //adapter.setTransactions(getTransactionByMonth(4));
-                        return true;
-                    case R.id.may:
-                        //recyclerView.removeAllViews();
-                        //adapter.setTransactions(getTransactionByMonth(5));
-                        return true;
-                    case R.id.june:
-                        //recyclerView.removeAllViews();
-                        //adapter.setTransactions(getTransactionByMonth(6));
-                        return true;
-                    case R.id.july:
-                        //recyclerView.removeAllViews();
-                        //adapter.setTransactions(getTransactionByMonth(7));
-                        return true;
-                    case R.id.august:
-                        //recyclerView.removeAllViews();
-                        //adapter.setTransactions(getTransactionByMonth(8));
-                        return true;
-                    case R.id.september:
-                        //recyclerView.removeAllViews();
-                        //adapter.setTransactions(getTransactionByMonth(9));
-                        return true;
-                    case R.id.october:
-                        //recyclerView.removeAllViews();
-                        //adapter.setTransactions(getTransactionByMonth(10));
-                    case R.id.november:
-                        //recyclerView.removeAllViews();
-                        //adapter.setTransactions(getTransactionByMonth(11));
-                    case R.id.december:
-                        //recyclerView.removeAllViews();
-                        //adapter.setTransactions(getTransactionByMonth(12));
-                    case R.id.all:
-                        //recyclerView.removeAllViews();
-                        //adapter.setTransactions(mTransactionViewModel.getAllTransactions().getValue());
-                        return true;
-                    default:
-                        return false;
-                }
-            }
-        });
-
-        popup.show();
-    }
-
-    private List<Transaction> getTransactionByMonth(int i)
-    {
-        ArrayList<Transaction> transactions = new ArrayList<>();
-        try {
-            for (Transaction transaction : mTransactionViewModel.getAllTransactions().getValue()) {
-                if (Integer.parseInt(DateFormat.format("MM", transaction.getAddedDate()).toString()) == i) {
-                    transactions.add(transaction);
-                }
-            }
-            return transactions;
+        void setTransactions(List<Transaction> transactions){
+            this.transactions = transactions;
+            notifyDataSetChanged();
         }
-        catch (Exception e)
-        {
-            Toast.makeText(getActivity(), e.toString(), Toast.LENGTH_SHORT).show();
-        }
-        finally {
-            return transactions;
-        }
+
     }
-
-
 }
