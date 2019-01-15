@@ -38,4 +38,10 @@ public interface TransactionsDao
 
     @Query("DELETE FROM `transaction`")
     public void deleteAll();
+
+    @Query("SELECT * FROM `Transaction` " +
+            "INNER JOIN Category ON `transaction`.category_id = category.cid " +
+            "WHERE Category.type LIKE :category "
+    )
+    public LiveData<List<Transaction>> getTransactionByCategoryType(int category);
 }

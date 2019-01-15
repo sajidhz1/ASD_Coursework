@@ -37,6 +37,10 @@ public class TransactionRepository {
         new TransactionRepository.updateTaskAsync(mTransactionDao).execute(transaction);
     }
 
+    public LiveData<List<Transaction>> getTransactionByCategoryType(int category) {
+        return mTransactionDao.getTransactionByCategoryType(category);
+    }
+
     public void deleteAll() {
         new TransactionRepository.deleteAllTaskAsync(mTransactionDao).execute();
     }

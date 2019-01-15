@@ -20,6 +20,8 @@ public class TransactionViewModel extends AndroidViewModel
 
     public void insert(Transaction transaction) { mRepository.insert(transaction); }
 
+    public LiveData<List<Transaction>> getTransactionByCategoryType(int category) { return mRepository.getTransactionByCategoryType(category); }
+
     public void delete(Transaction transaction) { mRepository.delete(transaction); }
 
     public void deleteAll() { mRepository.deleteAll(); }
