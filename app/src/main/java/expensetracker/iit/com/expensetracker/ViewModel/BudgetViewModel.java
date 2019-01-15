@@ -25,7 +25,11 @@ public class BudgetViewModel extends AndroidViewModel
 
     LiveData<List<Budget>> getAllBudgets() { return mAllBudgets; }
 
-    public void insert(Budget budget) { mRepository.insert(budget); }
+    public int insert(Budget budget) {
+        return mRepository.insert(budget);
+    }
+
+    public void update(Budget budget) { mRepository.update(budget); }
 
     public void deleteAll() { mRepository.deleteAll(); }
 

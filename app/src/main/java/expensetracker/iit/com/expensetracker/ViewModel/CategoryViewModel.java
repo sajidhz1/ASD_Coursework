@@ -24,6 +24,8 @@ public class CategoryViewModel extends AndroidViewModel {
 
     public void delete(Category category) { mCategoryRepository.delete(category); }
 
+    public void update(Category category) { mCategoryRepository.update(category); }
+
     public void deleteAll() { mCategoryRepository.deleteAll(); }
 
     public CategoryViewModel(@NonNull Application application) {
