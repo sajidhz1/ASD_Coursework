@@ -35,6 +35,7 @@ public class Category
     public Category(String name, int type, Date createdDate) {
         this.name = name;
         this.type = type;
+        this.createdDate = createdDate;
     }
 
     public Category(String name, int type, int budgetId, Date createdDate) {
