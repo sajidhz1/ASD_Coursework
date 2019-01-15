@@ -1,6 +1,5 @@
 package expensetracker.iit.com.expensetracker.Dialogs;
 
-import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -8,20 +7,19 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
 import expensetracker.iit.com.expensetracker.Common.Constants;
+import expensetracker.iit.com.expensetracker.Enum.CategoryTypeEnum;
 import expensetracker.iit.com.expensetracker.Model.Category;
-import expensetracker.iit.com.expensetracker.Model.Transaction;
 import expensetracker.iit.com.expensetracker.R;
 
 public class CreateCategoryDialog extends Dialog {
@@ -48,10 +46,13 @@ public class CreateCategoryDialog extends Dialog {
         setContentView(R.layout.create_category_dialog);
 
         nameEditText = findViewById(R.id.name);
-        typeSpinner = findViewById(R.id.type);
+        typeSpinner = (Spinner) findViewById(R.id.type);
         budgetEditText = findViewById(R.id.budget);
         saveButton = findViewById(R.id.btnSave);
         cancelButton = findViewById(R.id.btnCancel);
+
+        typeSpinner.setAdapter(new ArrayAdapter<CategoryTypeEnum>(CreateCategoryDialog.this.getContext(),
+                android.R.layout.simple_spinner_item, CategoryTypeEnum.values()));
 
         if (category != null) {
             nameEditText.setText(category.getName());
@@ -62,7 +63,7 @@ public class CreateCategoryDialog extends Dialog {
             try {
                 onCategoryAddListener.AddCategory(
                         new Category(nameEditText.getText().toString().trim(),
-                                0,
+                                Integer.parseInt(typeSpinner.getSelectedItem().toString()),
                                 new Date()),
                         Double.parseDouble(budgetEditText.getText().toString().trim())
                 );
