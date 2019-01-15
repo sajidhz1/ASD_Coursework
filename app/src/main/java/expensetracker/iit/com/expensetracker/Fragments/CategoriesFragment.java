@@ -3,6 +3,7 @@ package expensetracker.iit.com.expensetracker.Fragments;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import expensetracker.iit.com.expensetracker.AppDatabase;
 import expensetracker.iit.com.expensetracker.Dialogs.CreateCategoryDialog;
 import expensetracker.iit.com.expensetracker.Model.Budget;
 import expensetracker.iit.com.expensetracker.Model.Category;
@@ -83,10 +85,17 @@ public class CategoriesFragment extends BaseFragment implements CreateCategoryDi
 
     @Override
     public void AddCategory(Category category, double budgetAmount) {
+        AppDatabase db = AppDatabase.getDatabase(getContext());
         Budget newBudget = new Budget();
         newBudget.setBudget(budgetAmount);
-        category.setBudgetId(mbudgetViewModel.insert(newBudget));
-        mCategoryViewModel.insert(category);
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                int budgetId = (int)db.budgetDao().insert(newBudget);
+                category.setBudgetId(budgetId);
+                mCategoryViewModel.insert(category);
+            }
+        });
     }
 
     @Override
