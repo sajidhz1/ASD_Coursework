@@ -69,21 +69,20 @@ public class CategoriesFragment extends BaseFragment implements CreateCategoryDi
             @Override
             public void onChanged(@Nullable final List<Category> categories) {
                 // Update the cached copy of the words in the adapter.
-                adapter.setCategories(categories );
+                adapter.setCategories(categories);
             }
         });
     }
 
     @Override
-    public void OpenAddNewDialog()
-    {
+    public void OpenAddNewDialog() {
         CreateCategoryDialog ccd = new CreateCategoryDialog(getActivity(), this, null);
+
         ccd.show();
     }
 
     @Override
-    public void AddCategory(Category category, double budgetAmount)
-    {
+    public void AddCategory(Category category, double budgetAmount) {
         Budget newBudget = new Budget();
         newBudget.setBudget(budgetAmount);
         category.setBudgetId(mbudgetViewModel.insert(newBudget));
@@ -91,10 +90,10 @@ public class CategoriesFragment extends BaseFragment implements CreateCategoryDi
     }
 
     @Override
-    public void UpdateCategory(Category category)
-    {
+    public void UpdateCategory(Category category) {
         mCategoryViewModel.update(category);
     }
+
 
     public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
 

@@ -10,7 +10,6 @@ import android.arch.persistence.room.Update;
 import java.util.List;
 
 import expensetracker.iit.com.expensetracker.Model.Budget;
-import expensetracker.iit.com.expensetracker.Model.Category;
 
 @Dao
 public interface BudgetDao
@@ -40,5 +39,5 @@ public interface BudgetDao
     LiveData<List<Budget>> getAllLive(); 
 
     @Query("DELETE FROM `category`")
-    public void deleteAll();
+    void deleteAll();
 }

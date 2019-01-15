@@ -17,17 +17,17 @@ public class CategoryRepository {
     private CategoryDao mCategoryDao;
     private LiveData<List<Category>> mAllCategories;
 
-    public CategoryRepository(Application application){
+    public CategoryRepository(Application application) {
         AppDatabase db = AppDatabase.getDatabase(application);
         mCategoryDao = db.categoryDao();
         mAllCategories = mCategoryDao.getAllLive();
     }
 
-    public LiveData<List<Category>> getAllCategories(){
+    public LiveData<List<Category>> getAllCategories() {
         return this.mAllCategories;
     }
 
-    public void insert(Category category){
+    public void insert(Category category) {
         new CategoryRepository.insertAsyncTask(mCategoryDao).execute(category);
     }
 
@@ -37,6 +37,10 @@ public class CategoryRepository {
 
     public void update(Category category) {
         new CategoryRepository.updateTaskAsync(mCategoryDao).execute(category);
+    }
+
+    public void deleteAll() {
+        new CategoryRepository.deleteAllTaskAsync(mCategoryDao).execute();
     }
 
     private static class insertAsyncTask extends AsyncTask<Category, Void, Void> {
@@ -75,10 +79,25 @@ public class CategoryRepository {
             mAsyncTaskDao = dao;
         }
 
-        @Override
         protected Void doInBackground(Category... categories) {
             mAsyncTaskDao.update(categories[0]);
             return null;
         }
     }
+
+    private static class deleteAllTaskAsync extends AsyncTask<Void, Void, Void> {
+        private CategoryDao mAsyncTaskDao;
+
+        deleteAllTaskAsync(CategoryDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            mAsyncTaskDao.deleteAll();
+            return null;
+        }
+    }
 }
+
+

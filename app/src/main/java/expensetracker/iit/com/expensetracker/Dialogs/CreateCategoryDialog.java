@@ -32,12 +32,12 @@ public class CreateCategoryDialog extends Dialog {
     Category category;
 
     private OnCategoryAddListener onCategoryAddListener;
+    final Calendar calendar = Calendar.getInstance();
 
     public CreateCategoryDialog(@NonNull Context context, OnCategoryAddListener onCategoryAddListener, Category category) {
         super(context, R.style.full_screen_dialog);
         getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT,
                 WindowManager.LayoutParams.MATCH_PARENT);
-
         this.onCategoryAddListener = onCategoryAddListener;
         this.category = category;
     }
@@ -93,6 +93,5 @@ public class CreateCategoryDialog extends Dialog {
         public void AddCategory(Category category, double budgetAmount);
 
         public void UpdateCategory(Category category);
-
     }
 }

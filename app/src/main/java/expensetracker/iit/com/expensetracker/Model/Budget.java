@@ -35,4 +35,5 @@ public class Budget {
     public void setBudget(double budget) {
         this.budget = budget;
     }
+
 }

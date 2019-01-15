@@ -12,8 +12,7 @@ import expensetracker.iit.com.expensetracker.Dao.CategoryDao;
 import expensetracker.iit.com.expensetracker.Model.Budget;
 import expensetracker.iit.com.expensetracker.Model.Category;
 
-public class BudgetRepository
-{
+public class BudgetRepository {
     private BudgetDao mbudgetDao;
     private LiveData<List<Budget>> mAllBudgets;
 
@@ -27,15 +26,32 @@ public class BudgetRepository
         return mAllBudgets;
     }
 
-
-    public int insert (Budget budget) {
-        return (int)mbudgetDao.insert(budget);
+    public int insert(Budget budget) {
+        return (int) mbudgetDao.insert(budget);
     }
 
-    public void update (Budget budget){
+    public void update(Budget budget) {
         new BudgetRepository.updateTaskAsync(mbudgetDao).execute(budget);
     }
 
+    public void deleteAll() {
+        new BudgetRepository.deleteAllTaskAsync(mbudgetDao).execute();
+    }
+
+    private static class insertAsyncTask extends AsyncTask<Budget, Void, Void> {
+
+        private BudgetDao mAsyncTaskDao;
+
+        insertAsyncTask(BudgetDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(final Budget... params) {
+            mAsyncTaskDao.insert(params[0]);
+            return null;
+        }
+    }
 
     private static class updateTaskAsync extends AsyncTask<Budget, Void, Void> {
         private BudgetDao mAsyncTaskDao;
@@ -47,6 +63,21 @@ public class BudgetRepository
         @Override
         protected Void doInBackground(Budget... budgets) {
             mAsyncTaskDao.update(budgets[0]);
+            return null;
+        }
+    }
+
+    private static class deleteAllTaskAsync extends AsyncTask<Void, Void, Void> {
+
+        private BudgetDao mAsyncTaskDao;
+
+        deleteAllTaskAsync(BudgetDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            mAsyncTaskDao.deleteAll();
             return null;
         }
     }

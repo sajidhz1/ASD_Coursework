@@ -10,7 +10,6 @@ import android.arch.persistence.room.Update;
 import java.util.List;
 
 import expensetracker.iit.com.expensetracker.Model.Category;
-import expensetracker.iit.com.expensetracker.Model.Transaction;
 
 @Dao
 public interface CategoryDao {
@@ -36,5 +35,5 @@ public interface CategoryDao {
     LiveData<List<Category>> getAllLive();
 
     @Query("DELETE FROM `category`")
-    public void deleteAll();
+    void deleteAll();
 }
