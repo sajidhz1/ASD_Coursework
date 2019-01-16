@@ -42,7 +42,7 @@ import expensetracker.iit.com.expensetracker.ViewModel.TransactionViewModel;
 public class TransactionsFragment extends BaseFragment implements CreateTransactionDialog.OnTransactionAddListener {
 
     private RecyclerView recyclerView;
-    private TextView sort;
+    private TextView sort, debitTextView, creditTextView;
     private TransactionViewModel mTransactionViewModel;
     private CategoryViewModel mCategoryViewModel;
     private TransactionAdapter adapter;
@@ -68,14 +68,21 @@ public class TransactionsFragment extends BaseFragment implements CreateTransact
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.transactions_fragment, container, false);
+    }
 
-        View rootView = inflater.inflate(R.layout.transactions_fragment, container, false);
+    @Override
+    public void onResume() {
+        super.onResume();
 
         // Get a new or existing ViewModel from the ViewModelProvider.
         mTransactionViewModel = ViewModelProviders.of(this).get(TransactionViewModel.class);
         mCategoryViewModel = ViewModelProviders.of(this).get(CategoryViewModel.class);
 
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.transactionsList);
+        debitTextView = getView().findViewById(R.id.debit);
+        creditTextView = getView().findViewById(R.id.credit);
+
+        recyclerView = (RecyclerView) getView().findViewById(R.id.transactionsList);
         adapter = new TransactionAdapter(getContext(), mTransactionViewModel, this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -95,15 +102,41 @@ public class TransactionsFragment extends BaseFragment implements CreateTransact
             }
         });
 
-        sort =  rootView.findViewById(R.id.sort);
+        mTransactionViewModel.getTransactionByCategoryType(0).observe(this, new Observer<List<Transaction>>() {
+            @Override
+            public void onChanged(@Nullable final List<Transaction> transactions) {
+                double amount = 0;
+                for(Transaction t : transactions)
+                {
+                    amount += t.getAmount();
+                }
+
+                debitTextView.setText(amount + " $");
+            }
+        });
+
+        mTransactionViewModel.getTransactionByCategoryType(1).observe(this, new Observer<List<Transaction>>() {
+            @Override
+            public void onChanged(@Nullable final List<Transaction> transactions) {
+                double amount = 0;
+                for(Transaction t : transactions)
+                {
+                    amount += t.getAmount();
+                }
+
+                creditTextView.setText(amount + " $");
+            }
+        });
+
+        sort =  getView().findViewById(R.id.sort);
         sort.setOnClickListener((View v) -> {
 
             @SuppressLint("RestrictedApi")
             MenuBuilder menuBuilder = new MenuBuilder(getContext());
             @SuppressLint("RestrictedApi")
-            SupportMenuInflater infla = new SupportMenuInflater(getContext());
+            SupportMenuInflater inflater = new SupportMenuInflater(getContext());
 
-            infla.inflate(R.menu.menu_sort, menuBuilder);
+            inflater.inflate(R.menu.menu_sort, menuBuilder);
             @SuppressLint("RestrictedApi")
             MenuPopupHelper optionsMenu = new MenuPopupHelper(getContext(), menuBuilder, v);
             optionsMenu.setForceShowIcon(true);
@@ -138,13 +171,6 @@ public class TransactionsFragment extends BaseFragment implements CreateTransact
             });
             optionsMenu.show();
         });
-
-        return rootView;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
     }
 
     @Override

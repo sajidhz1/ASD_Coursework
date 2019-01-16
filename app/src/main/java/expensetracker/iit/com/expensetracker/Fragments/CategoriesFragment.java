@@ -3,6 +3,7 @@ package expensetracker.iit.com.expensetracker.Fragments;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,10 +18,13 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import expensetracker.iit.com.expensetracker.AppDatabase;
 import expensetracker.iit.com.expensetracker.Dialogs.CreateCategoryDialog;
+import expensetracker.iit.com.expensetracker.Model.Budget;
 import expensetracker.iit.com.expensetracker.Model.Category;
 import expensetracker.iit.com.expensetracker.Model.Transaction;
 import expensetracker.iit.com.expensetracker.R;
+import expensetracker.iit.com.expensetracker.ViewModel.BudgetViewModel;
 import expensetracker.iit.com.expensetracker.ViewModel.CategoryViewModel;
 import expensetracker.iit.com.expensetracker.ViewModel.TransactionViewModel;
 
@@ -28,6 +32,7 @@ public class CategoriesFragment extends BaseFragment implements CreateCategoryDi
 
     private ListView categoriesListView;
     private CategoryViewModel mCategoryViewModel;
+    private BudgetViewModel mbudgetViewModel;
 
     public static CategoriesFragment newInstance() {
         CategoriesFragment fragment = new CategoriesFragment();
@@ -55,6 +60,7 @@ public class CategoriesFragment extends BaseFragment implements CreateCategoryDi
 
         // Get a new or existing ViewModel from the ViewModelProvider.
         mCategoryViewModel = ViewModelProviders.of(this).get(CategoryViewModel.class);
+        mbudgetViewModel = ViewModelProviders.of(this).get(BudgetViewModel.class);
 
         RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.categoriesList);
         final CategoryAdapter adapter = new CategoryAdapter(getContext(), mCategoryViewModel);
@@ -65,22 +71,36 @@ public class CategoriesFragment extends BaseFragment implements CreateCategoryDi
             @Override
             public void onChanged(@Nullable final List<Category> categories) {
                 // Update the cached copy of the words in the adapter.
-                adapter.setCategories(categories );
+                adapter.setCategories(categories);
             }
         });
     }
 
     @Override
-    public void OpenAddNewDialog()
-    {
-        CreateCategoryDialog ccd = new CreateCategoryDialog(getActivity(), this);
+    public void OpenAddNewDialog() {
+        CreateCategoryDialog ccd = new CreateCategoryDialog(getActivity(), this, null);
+
         ccd.show();
     }
 
     @Override
-    public void AddCategory(Category category)
-    {
-        mCategoryViewModel.insert(category);
+    public void AddCategory(Category category, double budgetAmount) {
+        AppDatabase db = AppDatabase.getDatabase(getContext());
+        Budget newBudget = new Budget();
+        newBudget.setBudget(budgetAmount);
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                int budgetId = (int) db.budgetDao().insert(newBudget);
+                category.setBudgetId(budgetId);
+                mCategoryViewModel.insert(category);
+            }
+        });
+    }
+
+    @Override
+    public void UpdateCategory(Category category) {
+        mCategoryViewModel.update(category);
     }
 
     public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
