@@ -68,18 +68,14 @@ public class TransactionsFragment extends BaseFragment implements CreateTransact
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.transactions_fragment, container, false);
-    }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+        View rootView = inflater.inflate(R.layout.transactions_fragment, container, false);
 
         // Get a new or existing ViewModel from the ViewModelProvider.
         mTransactionViewModel = ViewModelProviders.of(this).get(TransactionViewModel.class);
         mCategoryViewModel = ViewModelProviders.of(this).get(CategoryViewModel.class);
 
-        recyclerView = (RecyclerView) getView().findViewById(R.id.transactionsList);
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.transactionsList);
         adapter = new TransactionAdapter(getContext(), mTransactionViewModel, this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -99,15 +95,15 @@ public class TransactionsFragment extends BaseFragment implements CreateTransact
             }
         });
 
-        sort =  getView().findViewById(R.id.sort);
+        sort =  rootView.findViewById(R.id.sort);
         sort.setOnClickListener((View v) -> {
 
             @SuppressLint("RestrictedApi")
             MenuBuilder menuBuilder = new MenuBuilder(getContext());
             @SuppressLint("RestrictedApi")
-            SupportMenuInflater inflater = new SupportMenuInflater(getContext());
+            SupportMenuInflater infla = new SupportMenuInflater(getContext());
 
-            inflater.inflate(R.menu.menu_sort, menuBuilder);
+            infla.inflate(R.menu.menu_sort, menuBuilder);
             @SuppressLint("RestrictedApi")
             MenuPopupHelper optionsMenu = new MenuPopupHelper(getContext(), menuBuilder, v);
             optionsMenu.setForceShowIcon(true);
@@ -142,6 +138,13 @@ public class TransactionsFragment extends BaseFragment implements CreateTransact
             });
             optionsMenu.show();
         });
+
+        return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     @Override
