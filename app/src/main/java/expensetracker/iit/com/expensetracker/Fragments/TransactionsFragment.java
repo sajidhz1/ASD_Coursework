@@ -42,7 +42,7 @@ import expensetracker.iit.com.expensetracker.ViewModel.TransactionViewModel;
 public class TransactionsFragment extends BaseFragment implements CreateTransactionDialog.OnTransactionAddListener {
 
     private RecyclerView recyclerView;
-    private TextView sort;
+    private TextView sort, debitTextView, creditTextView;
     private TransactionViewModel mTransactionViewModel;
     private CategoryViewModel mCategoryViewModel;
     private TransactionAdapter adapter;
@@ -79,6 +79,9 @@ public class TransactionsFragment extends BaseFragment implements CreateTransact
         mTransactionViewModel = ViewModelProviders.of(this).get(TransactionViewModel.class);
         mCategoryViewModel = ViewModelProviders.of(this).get(CategoryViewModel.class);
 
+        debitTextView = getView().findViewById(R.id.debit);
+        creditTextView = getView().findViewById(R.id.credit);
+
         recyclerView = (RecyclerView) getView().findViewById(R.id.transactionsList);
         adapter = new TransactionAdapter(getContext(), mTransactionViewModel, this);
         recyclerView.setAdapter(adapter);
@@ -96,6 +99,32 @@ public class TransactionsFragment extends BaseFragment implements CreateTransact
             public void onChanged(@Nullable final List<Transaction> transactions) {
                 // Update the cached copy of the words in the adapter.
                 adapter.setTransactions(transactions);
+            }
+        });
+
+        mTransactionViewModel.getTransactionByCategoryType(0).observe(this, new Observer<List<Transaction>>() {
+            @Override
+            public void onChanged(@Nullable final List<Transaction> transactions) {
+                double amount = 0;
+                for(Transaction t : transactions)
+                {
+                    amount += t.getAmount();
+                }
+
+                debitTextView.setText(amount + " $");
+            }
+        });
+
+        mTransactionViewModel.getTransactionByCategoryType(1).observe(this, new Observer<List<Transaction>>() {
+            @Override
+            public void onChanged(@Nullable final List<Transaction> transactions) {
+                double amount = 0;
+                for(Transaction t : transactions)
+                {
+                    amount += t.getAmount();
+                }
+
+                creditTextView.setText(amount + " $");
             }
         });
 
