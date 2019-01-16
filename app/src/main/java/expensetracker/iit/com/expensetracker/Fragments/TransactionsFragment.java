@@ -330,16 +330,18 @@ public class TransactionsFragment extends BaseFragment implements CreateTransact
                     viewModel.delete(current);
                 });
 
-                Optional<Category> c =  categories.stream().filter(category -> category.cid == current.getCategoryID()).findFirst();
-                if(c.get() != null)
-                {
-                    if(c.get().type == 1)
+                if(categories!= null){
+                    Optional<Category> c =  categories.stream().filter(category -> category.cid == current.getCategoryID()).findFirst();
+                    if(c.get() != null)
                     {
-                        holder.transactionNoteTextView.setTextColor(Color.GREEN);
-                    }
-                    else
-                    {
-                        holder.transactionNoteTextView.setTextColor(Color.RED);
+                        if(c.get().type == 1)
+                        {
+                            holder.transactionNoteTextView.setTextColor(Color.GREEN);
+                        }
+                        else
+                        {
+                            holder.transactionNoteTextView.setTextColor(Color.RED);
+                        }
                     }
                 }
 
